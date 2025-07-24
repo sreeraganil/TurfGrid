@@ -1,117 +1,228 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
+<header class="sticky top-0 z-20 left-0 bg-purple-700 text-white p-4 shadow-md">
+  <nav class="container mx-auto flex justify-between items-center">
+    <a href="#" class="text-2xl font-bold tracking-tight">TurfGrid</a>
 
-<header class="bg-purple-700 text-white p-4 shadow-md">
-    <nav class="container mx-auto flex justify-between items-center">
-        <a href="#" class="text-2xl font-bold tracking-tight">TurfGrid</a>
-
-        <div class="md:hidden">
-            <button id="menu-btn" type="button" class="text-white hover:text-purple-200 focus:outline-none">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
-        </div>
-
-        <div id="menu" class="hidden md:flex items-center space-x-6">
-            <ul class="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0 mt-4 md:mt-0">
-                <li><a href="#features" class="hover:text-purple-200 transition duration-300">How it Works</a></li>
-                <li><a href="#about" class="hover:text-purple-200 transition duration-300">About Us</a></li>
-                <li><a href="#contact" class="hover:text-purple-200 transition duration-300">Contact</a></li>
-            </ul>
-            <a href="#book" class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300 shadow-lg mt-4 md:mt-0">Book Now</a>
-        </div>
-    </nav>
-</header>
-<div id="mobile-menu" class="hidden md:hidden bg-purple-700 text-white">
-    <ul class="px-4 pt-2 pb-3 space-y-1 sm:px-3 text-center">
-        <li><a href="#features" class="block py-2 rounded-md text-base font-medium hover:bg-purple-600">How it Works</a></li>
-        <li><a href="#about" class="block py-2 rounded-md text-base font-medium hover:bg-purple-600">About Us</a></li>
-        <li><a href="#contact" class="block py-2 rounded-md text-base font-medium hover:bg-purple-600">Contact</a></li>
-    </ul>
-</div>
-
-
-<section class="bg-gradient-to-r from-purple-700 to-purple-500 text-white py-20 text-center">
-    <div class="container mx-auto px-4">
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-4">
-            TurfGrid: Your Pitch, Booked.
-        </h1>
-        <p class="text-lg sm:text-xl md:text-2xl mb-8 opacity-90">
-            Seamlessly find and reserve the perfect turf for your next game.
-        </p>
-        <a href="#book" class="bg-white text-purple-700 hover:bg-gray-100 font-bold py-3 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300">
-            Find a Turf Now!
-        </a>
-        <div class="mt-12">
-            <div class="w-full h-64 bg-purple-600 rounded-lg shadow-xl mx-auto flex items-center justify-center">
-                <p class="text-purple-200 text-lg">Illustration Placeholder (e.g., stylized turf or calendar)</p>
-            </div>
-        </div>
+    <div class="md:hidden">
+      <button
+        id="menu-btn"
+        type="button"
+        class="text-white hover:text-purple-200 focus:outline-none"
+      >
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16m-7 6h7"
+          />
+        </svg>
+      </button>
+      <button
+        id="close-btn"
+        type="button"
+        class="hidden text-white hover:text-purple-200 focus:outline-none"
+      >
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
     </div>
+
+    <div id="menu" class="hidden md:flex items-center space-x-6">
+      <ul
+        class="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0 mt-4 md:mt-0"
+      >
+        <li>
+          <a
+            href="#features"
+            class="hover:text-purple-200 transition duration-300"
+            >How it Works</a
+          >
+        </li>
+        <li>
+          <a href="#about" class="hover:text-purple-200 transition duration-300"
+            >About Us</a
+          >
+        </li>
+        <li>
+          <a
+            href="#contact"
+            class="hover:text-purple-200 transition duration-300"
+            >Contact</a
+          >
+        </li>
+      </ul>
+      <a
+        href="#book"
+        class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300 shadow-lg mt-4 md:mt-0"
+        >Book Now</a
+      >
+    </div>
+  </nav>
+  <div
+    id="mobile-menu"
+    class="absolute left-0 top-[-200px] right-0 z-10 md:hidden bg-purple-700 text-white transition-all duration-500 ease-in-out"
+  >
+    <ul class="px-4 pt-2 pb-3 space-y-1 sm:px-3 text-center">
+      <li>
+        <a
+          href="#features"
+          class="block py-2 rounded-md text-base font-medium hover:bg-purple-600"
+          >How it Works</a
+        >
+      </li>
+      <li>
+        <a
+          href="#about"
+          class="block py-2 rounded-md text-base font-medium hover:bg-purple-600"
+          >About Us</a
+        >
+      </li>
+      <li>
+        <a
+          href="#contact"
+          class="block py-2 rounded-md text-base font-medium hover:bg-purple-600"
+          >Contact</a
+        >
+      </li>
+    </ul>
+  </div>
+</header>
+
+<section
+  class="bg-gradient-to-r from-purple-700 to-purple-500 text-white py-20 text-center"
+>
+  <div class="container mx-auto px-4">
+    <h1
+      class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-4"
+    >
+      TurfGrid: Your Pitch, Booked.
+    </h1>
+    <p class="text-lg sm:text-xl md:text-2xl mb-8 opacity-90">
+      Seamlessly find and reserve the perfect turf for your next game.
+    </p>
+    <a
+      href="#book"
+      class="bg-white text-purple-700 hover:bg-gray-100 font-bold py-3 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300"
+    >
+      Find a Turf Now!
+    </a>
+    <div class="mt-12">
+      <div
+        class="w-full h-64 bg-purple-600 rounded-lg shadow-xl mx-auto flex items-center justify-center"
+      >
+        <p class="text-purple-200 text-lg">
+          Illustration Placeholder (e.g., stylized turf or calendar)
+        </p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section id="features" class="py-16 bg-gray-100">
-    <div class="container mx-auto px-4 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">Why Choose TurfGrid?</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
-                <div class="text-purple-500 text-5xl mb-4">⚽</div>
-                <h3 class="text-2xl font-semibold mb-3">Easy Booking</h3>
-                <p class="text-gray-600">
-                    Reserve your spot in just a few clicks. No more endless calls or paperwork.
-                </p>
-            </div>
-            <div class="bg-white p-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
-                <div class="text-purple-500 text-5xl mb-4">📍</div>
-                <h3 class="text-2xl font-semibold mb-3">Wide Selection</h3>
-                <p class="text-gray-600">
-                    Explore a variety of turf fields near you, with detailed information.
-                </p>
-            </div>
-            <div class="bg-white p-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
-                <div class="text-purple-500 text-5xl mb-4">💳</div>
-                <h3 class="text-2xl font-semibold mb-3">Secure Payments</h3>
-                <p class="text-gray-600">
-                    Pay safely and conveniently online through our integrated system.
-                </p>
-            </div>
-        </div>
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">
+      Why Choose TurfGrid?
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div
+        class="bg-white p-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300"
+      >
+        <div class="text-purple-500 text-5xl mb-4">⚽</div>
+        <h3 class="text-2xl font-semibold mb-3">Easy Booking</h3>
+        <p class="text-gray-600">
+          Reserve your spot in just a few clicks. No more endless calls or
+          paperwork.
+        </p>
+      </div>
+      <div
+        class="bg-white p-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300"
+      >
+        <div class="text-purple-500 text-5xl mb-4">📍</div>
+        <h3 class="text-2xl font-semibold mb-3">Wide Selection</h3>
+        <p class="text-gray-600">
+          Explore a variety of turf fields near you, with detailed information.
+        </p>
+      </div>
+      <div
+        class="bg-white p-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300"
+      >
+        <div class="text-purple-500 text-5xl mb-4">💳</div>
+        <h3 class="text-2xl font-semibold mb-3">Secure Payments</h3>
+        <p class="text-gray-600">
+          Pay safely and conveniently online through our integrated system.
+        </p>
+      </div>
     </div>
+  </div>
 </section>
 
 <section id="book" class="bg-purple-600 text-white py-16 text-center">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Play?</h2>
-        <p class="text-xl mb-8 opacity-90">
-            Don't miss out on your perfect game. Book your turf today!
-        </p>
-        <a href="#" class="bg-white text-purple-700 hover:bg-gray-100 font-bold py-3 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300">
-            Browse Turfs
-        </a>
-    </div>
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Play?</h2>
+    <p class="text-xl mb-8 opacity-90">
+      Don't miss out on your perfect game. Book your turf today!
+    </p>
+    <a
+      href="#"
+      class="bg-white text-purple-700 hover:bg-gray-100 font-bold py-3 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300"
+    >
+      Browse Turfs
+    </a>
+  </div>
 </section>
 
 <footer class="bg-gray-800 text-gray-300 py-8">
-    <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
-        <p>&copy; 2025 TurfGrid. All rights reserved.</p>
-        <ul class="flex space-x-6 mt-4 md:mt-0">
-            <li><a href="#" class="hover:text-white transition duration-300">Privacy Policy</a></li>
-            <li><a href="#" class="hover:text-white transition duration-300">Terms of Service</a></li>
-        </ul>
-    </div>
+  <div
+    class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-center md:text-left"
+  >
+    <p>&copy; 2025 TurfGrid. All rights reserved.</p>
+    <ul class="flex space-x-6 mt-4 md:mt-0">
+      <li>
+        <a href="#" class="hover:text-white transition duration-300"
+          >Privacy Policy</a
+        >
+      </li>
+      <li>
+        <a href="#" class="hover:text-white transition duration-300"
+          >Terms of Service</a
+        >
+      </li>
+    </ul>
+  </div>
 </footer>
 
 <script>
-    const menuBtn = document.getElementById('menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    // Hide the original desktop menu wrapper on mobile
-    const desktopMenu = document.getElementById('menu');
+  const menuBtn = document.getElementById("menu-btn");
+  const closeBtn = document.getElementById("close-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
 
-    menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
+  function toggleMenu() {
+    mobileMenu.classList.toggle("top-15");
+    mobileMenu.classList.toggle("top-[-200px]");
+    menuBtn.classList.toggle("hidden");
+    closeBtn.classList.toggle("hidden");
+  }
+
+  menuBtn.addEventListener("click", toggleMenu);
+  closeBtn.addEventListener("click", toggleMenu);
 </script>
 
 {% endblock %}
