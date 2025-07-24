@@ -2,5 +2,5 @@ services:
   - type: web
     name: TurfGrid
     env: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --no-input
     startCommand: gunicorn main.wsgi
