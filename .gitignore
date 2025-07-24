@@ -1,0 +1,16 @@
+# Keep your actual source static files
+# Ignore only the collected output
+/staticfiles/
+/*.py[cod]
+__pycache__/
+/.env
+db.sqlite3
+*.log
+desktop.ini
+
+
+# Virtual environments
+venv/
+.venv/
+ENV/
+.env/
