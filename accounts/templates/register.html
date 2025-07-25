@@ -32,7 +32,7 @@
       <form class="space-y-6" method="POST" action="{% url 'register' %}" novalidate>
         {% csrf_token %}
         
-        {% if form.errors %}
+        {% comment %} {% if form.errors %}
           <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
             <div class="flex">
               <div class="flex-shrink-0">
@@ -59,7 +59,7 @@
               </div>
             </div>
           </div>
-        {% endif %}
+        {% endif %} {% endcomment %}
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -69,7 +69,7 @@
             </label>
             <input
               id="id_first_name"
-              name="first_name"
+              name="fname"
               type="text"
               required
               class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
@@ -83,7 +83,7 @@
             </label>
             <input
               id="id_last_name"
-              name="last_name"
+              name="lname"
               type="text"
               required
               class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
@@ -180,7 +180,7 @@
           <div class="flex items-center h-5">
             <input
               id="terms"
-              name="terms"
+              name="terms_and_conditions"
               type="checkbox"
               required
               class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded"
@@ -205,11 +205,6 @@
             type="submit"
             class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-lg font-semibold rounded-full text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-300 shadow-lg transform hover:scale-[1.02]"
           >
-            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-              <svg class="h-5 w-5 text-purple-300 group-hover:text-purple-200 transition duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-              </svg>
-            </span>
             Create Account
           </button>
         </div>
