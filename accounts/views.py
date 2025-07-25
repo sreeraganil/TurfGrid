@@ -24,19 +24,32 @@ def login_view(request):
     return render(request, 'login.html')
 
 
+from django.views.decorators.cache import never_cache
+import traceback
+from django.contrib import messages
+
 @never_cache
 def register_view(request):
-    if request.user.is_authenticated :
+    if request.user.is_authenticated:
         return redirect('dashboard')
+
     form = CustomUserCreationForm()
+
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-        else:
-            messages.error(request, form.errors)
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('login')
+            else:
+                field, errors = next(iter(form.errors.items()))
+                messages.error(request, f"{field.capitalize()}: {errors[0]}")
+        except Exception as e:
+            print("Error during form processing:", e)
+            messages.error(request, "A server error occurred. Please try again.")
+    
     return render(request, 'register.html', {'form': form})
+
 
 
 @login_required(login_url='login')
