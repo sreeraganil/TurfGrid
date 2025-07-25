@@ -24,10 +24,6 @@ def login_view(request):
     return render(request, 'login.html')
 
 
-from django.views.decorators.cache import never_cache
-import traceback
-from django.contrib import messages
-
 @never_cache
 def register_view(request):
     if request.user.is_authenticated:
