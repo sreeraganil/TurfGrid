@@ -47,11 +47,6 @@ def register_view(request):
     return render(request, 'register.html', {'form': form})
 
 
-
-@login_required(login_url='login')
-def dashboard(request):
-    return render(request, 'dashboard.html')
-
 @never_cache
 def logout_view(request):
     logout(request)
