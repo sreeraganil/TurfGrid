@@ -1,211 +1,253 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
 
-<header class="sticky top-0 z-20 left-0 bg-purple-700 text-white p-4 shadow-md">
-  <nav class="container mx-auto flex justify-between items-center">
-    <a href="#" class="text-2xl font-bold tracking-tight">TurfGrid</a>
+ {% block content %}
 
-    <div class="md:hidden">
-      <button
-        id="menu-btn"
-        type="button"
-        class="text-white hover:text-purple-200 focus:outline-none"
-      >
-        <svg
-          class="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16m-7 6h7"
-          />
-        </svg>
-      </button>
-      <button
-        id="close-btn"
-        type="button"
-        class="hidden text-white hover:text-purple-200 focus:outline-none"
-      >
-        <svg
-          class="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
+<header class="sticky top-0 z-20 left-0 bg-gradient-to-r from-purple-700 to-purple-600 text-white shadow-lg">
+  <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <a href="#" class="text-2xl font-bold tracking-tight flex items-center gap-2">
+      <img src={% static 'images/logo_white.png' %} height="35" width="35" />
+      TurfGrid
+    </a>
+
+    <!-- Mobile menu button -->
+    <div class="md:hidden flex items-center">
+      <button id="menu-btn" type="button" class="text-white focus:outline-none">
+        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
     </div>
 
-    <div id="menu" class="hidden md:flex items-center space-x-6">
-      <ul
-        class="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0 mt-4 md:mt-0"
-      >
+    <!-- Desktop Navigation -->
+    <div class="hidden md:flex items-center space-x-8">
+      <ul class="flex space-x-8">
         <li>
-          <a
-            href="#features"
-            class="hover:text-purple-200 transition duration-300"
-            >How it Works</a
-          >
+          <a href="#features" class="hover:text-purple-200 transition duration-300 font-medium">How it Works</a>
         </li>
         <li>
-          <a href="#about" class="hover:text-purple-200 transition duration-300"
-            >About Us</a
-          >
+          <a href="#about" class="hover:text-purple-200 transition duration-300 font-medium">About Us</a>
         </li>
         <li>
-          <a
-            href="#contact"
-            class="hover:text-purple-200 transition duration-300"
-            >Contact</a
-          >
+          <a href="#contact" class="hover:text-purple-200 transition duration-300 font-medium">Contact</a>
         </li>
       </ul>
-      <a
-        href="{% url 'register' %}"
-        class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300 shadow-lg mt-4 md:mt-0"
-        >Get Started</a
-      >
+      <div class="ml-6">
+        <a href="{% url 'register' %}" class="bg-white text-purple-700 hover:bg-purple-50 font-semibold py-2 px-6 rounded-full transition duration-300 shadow-md hover:shadow-lg">
+          Get Started
+        </a>
+      </div>
     </div>
   </nav>
-  <div
-    id="mobile-menu"
-    class="absolute left-0 top-[-200px] right-0 z-10 md:hidden bg-purple-700 text-white transition-all duration-500 ease-in-out"
-  >
-    <ul class="px-4 pt-2 pb-3 space-y-1 sm:px-3 text-center">
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-gradient-to-b from-purple-700 to-purple-600 pb-4 px-4 absolute w-full z-10">
+    <div class="flex justify-end">
+      <button id="close-btn" type="button" class="text-white p-2 focus:outline-none">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <ul class="space-y-3">
       <li>
-        <a
-          href="#features"
-          class="block py-2 rounded-md text-base font-medium hover:bg-purple-600"
-          >How it Works</a
-        >
+        <a href="#features" class="block py-3 px-4 rounded-lg hover:bg-purple-500 text-lg font-medium">How it Works</a>
       </li>
       <li>
-        <a
-          href="#about"
-          class="block py-2 rounded-md text-base font-medium hover:bg-purple-600"
-          >About Us</a
-        >
+        <a href="#about" class="block py-3 px-4 rounded-lg hover:bg-purple-500 text-lg font-medium">About Us</a>
       </li>
       <li>
-        <a
-          href="#contact"
-          class="block py-2 rounded-md text-base font-medium hover:bg-purple-600"
-          >Contact</a
-        >
+        <a href="#contact" class="block py-3 px-4 rounded-lg hover:bg-purple-500 text-lg font-medium">Contact</a>
+      </li>
+      <li class="pt-2">
+        <a href="{% url 'register' %}" class="block text-center bg-white text-purple-700 font-semibold py-3 px-6 rounded-full shadow-md">
+          Get Started
+        </a>
       </li>
     </ul>
   </div>
 </header>
 
-<section
-  class="bg-gradient-to-r from-purple-700 to-purple-500 text-white py-20 text-center"
->
-  <div class="container mx-auto px-4">
-    <h1
-      class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-4"
-    >
-      TurfGrid: Your Pitch, Booked.
-    </h1>
-    <p class="text-lg sm:text-xl md:text-2xl mb-8 opacity-90">
-      Seamlessly find and reserve the perfect turf for your next game.
-    </p>
-    <a
-      href="#book"
-      class="bg-white text-purple-700 hover:bg-gray-100 font-bold py-3 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300"
-    >
-      Find a Turf Now!
-    </a>
-    <div class="mt-12">
-      <div
-        class="w-full h-64 bg-purple-600 rounded-lg shadow-xl mx-auto flex items-center justify-center"
-      >
-        <p class="text-purple-200 text-lg">
-          Illustration Placeholder (e.g., stylized turf or calendar)
-        </p>
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-purple-700 to-purple-600 text-white py-20 md:py-28">
+  <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+    <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6">
+        Your Perfect Game <br><span class="text-purple-200">Starts Here</span>
+      </h1>
+      <p class="text-xl md:text-2xl mb-8 opacity-90">
+        Discover and book premium turf fields in your area with just a few clicks.
+      </p>
+      <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+        <a href="#book" class="bg-white text-purple-700 hover:bg-purple-50 font-bold py-4 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300 text-center">
+          Find a Turf
+        </a>
+        <a href="#features" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-purple-700 font-bold py-4 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300 text-center">
+          How It Works
+        </a>
+      </div>
+    </div>
+    <div class="md:w-1/2">
+      <div class="relative">
+        <div class="w-full h-80 md:h-96 bg-purple-500 rounded-2xl shadow-2xl overflow-hidden flex items-center justify-center">
+          <img src="https://5.imimg.com/data5/SELLER/Default/2021/3/DX/XR/AV/49538092/slideone-pc-500x500.jpg" alt="Football turf" class="w-full h-full object-cover">
+        </div>
+        <div class="absolute -bottom-5 -right-5 bg-white text-purple-700 p-4 rounded-lg shadow-lg hidden md:block">
+          <div class="text-center">
+            <div class="text-2xl font-bold">150+</div>
+            <div class="text-sm">Turfs Available</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="features" class="py-16 bg-gray-100">
-  <div class="container mx-auto px-4 text-center">
-    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">
-      Why Choose TurfGrid?
-    </h2>
+<!-- Features Section -->
+<section id="features" class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Why Choose TurfGrid?</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        We've revolutionized turf booking to give you the best experience possible
+      </p>
+    </div>
+    
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div
-        class="bg-white p-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300"
-      >
-        <div class="text-purple-500 text-5xl mb-4">⚽</div>
-        <h3 class="text-2xl font-semibold mb-3">Easy Booking</h3>
-        <p class="text-gray-600">
-          Reserve your spot in just a few clicks. No more endless calls or
-          paperwork.
+      <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
+        <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-semibold text-center mb-3">Instant Booking</h3>
+        <p class="text-gray-600 text-center">
+          Reserve your spot in seconds with our intuitive booking system. Real-time availability means no more guesswork.
         </p>
       </div>
-      <div
-        class="bg-white p-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300"
-      >
-        <div class="text-purple-500 text-5xl mb-4">📍</div>
-        <h3 class="text-2xl font-semibold mb-3">Wide Selection</h3>
-        <p class="text-gray-600">
-          Explore a variety of turf fields near you, with detailed information.
+      
+      <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
+        <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-semibold text-center mb-3">Prime Locations</h3>
+        <p class="text-gray-600 text-center">
+          Access the best turf fields in your city, with detailed information and user reviews to help you choose.
         </p>
       </div>
-      <div
-        class="bg-white p-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300"
-      >
-        <div class="text-purple-500 text-5xl mb-4">💳</div>
-        <h3 class="text-2xl font-semibold mb-3">Secure Payments</h3>
-        <p class="text-gray-600">
-          Pay safely and conveniently online through our integrated system.
+      
+      <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
+        <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-semibold text-center mb-3">Secure Payments</h3>
+        <p class="text-gray-600 text-center">
+          Multiple payment options with bank-level security. Your transactions are always protected.
         </p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="book" class="bg-purple-600 text-white py-16 text-center">
-  <div class="container mx-auto px-4">
-    <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Play?</h2>
-    <p class="text-xl mb-8 opacity-90">
-      Don't miss out on your perfect game. Book your turf today!
-    </p>
-    <a
-      href="#"
-      class="bg-white text-purple-700 hover:bg-gray-100 font-bold py-3 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300"
-    >
-      Browse Turfs
-    </a>
+<!-- CTA Section -->
+<section id="book" class="py-16 bg-purple-700 text-white">
+  <div class="container mx-auto px-4 text-center">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Play?</h2>
+      <p class="text-xl mb-8 opacity-90">
+        Join thousands of players who've found their perfect turf through TurfGrid
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <a href="#" class="bg-white text-purple-700 hover:bg-purple-50 font-bold py-4 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300">
+          Browse Turfs
+        </a>
+        <a href="{% url 'register' %}" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-purple-700 font-bold py-4 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300">
+          Create Account
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 
-<footer class="bg-gray-800 text-gray-300 py-8">
-  <div
-    class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-center md:text-left"
-  >
-    <p>&copy; 2025 TurfGrid. All rights reserved.</p>
-    <ul class="flex space-x-6 mt-4 md:mt-0">
-      <li>
-        <a href="#" class="hover:text-white transition duration-300"
-          >Privacy Policy</a
-        >
-      </li>
-      <li>
-        <a href="#" class="hover:text-white transition duration-300"
-          >Terms of Service</a
-        >
-      </li>
-    </ul>
+<!-- Footer -->
+<footer class="bg-gray-900 text-gray-400 py-12">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="md:col-span-2">
+        <a href="#" class="text-2xl font-bold text-white flex items-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+          TurfGrid
+        </a>
+        <p class="mb-4">
+          Revolutionizing the way you book sports turfs. Find, book, and play - all in one place.
+        </p>
+        <div class="flex space-x-4">
+          <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+            </svg>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="text-white font-semibold text-lg mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-white transition duration-300">Home</a></li>
+          <li><a href="#features" class="hover:text-white transition duration-300">Features</a></li>
+          <li><a href="#about" class="hover:text-white transition duration-300">About Us</a></li>
+          <li><a href="#contact" class="hover:text-white transition duration-300">Contact</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="text-white font-semibold text-lg mb-4">Legal</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-white transition duration-300">Privacy Policy</a></li>
+          <li><a href="#" class="hover:text-white transition duration-300">Terms of Service</a></li>
+          <li><a href="#" class="hover:text-white transition duration-300">Cookie Policy</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="text-white font-semibold text-lg mb-4">Contact Us</h3>
+        <ul class="space-y-2">
+          <li class="flex items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            hello@turfgrid.com
+          </li>
+          <li class="flex items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            +1 (555) 123-4567
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+      <p>&copy; 2025 TurfGrid. All rights reserved.</p>
+    </div>
   </div>
 </footer>
 
@@ -215,14 +257,17 @@
   const mobileMenu = document.getElementById("mobile-menu");
 
   function toggleMenu() {
-    mobileMenu.classList.toggle("top-15");
-    mobileMenu.classList.toggle("top-[-200px]");
-    menuBtn.classList.toggle("hidden");
-    closeBtn.classList.toggle("hidden");
+    mobileMenu.classList.toggle("hidden");
+    document.body.classList.toggle("overflow-hidden");
   }
 
   menuBtn.addEventListener("click", toggleMenu);
   closeBtn.addEventListener("click", toggleMenu);
+
+  // Close mobile menu when clicking on a link
+  document.querySelectorAll('#mobile-menu a').forEach(link => {
+    link.addEventListener('click', toggleMenu);
+  });
 </script>
 
 {% endblock %}

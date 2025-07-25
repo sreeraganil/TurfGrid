@@ -1,170 +1,232 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
-{% block title %}Create Account - TurfGrid{% endblock%}
+{% load static %}
+
+{% block title %}Create Account - TurfGrid{% endblock %}
 
 {% block content %}
 
 <!-- Registration Form Section -->
-<main
-  class="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-700 to-purple-500 py-12 px-4 sm:px-6 lg:px-8"
->
-  <div
-    class="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl p-8 md:p-12 space-y-8"
-  >
-    <!-- Form Header -->
-    <div class="text-center">
-      <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">
-        Create Your Account
-      </h2>
-      <p class="mt-2 text-md text-gray-600">
-        Join TurfGrid to start booking fields instantly.
-      </p>
+<main class="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-900 to-purple-700 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <!-- Decorative Header -->
+    <div class="bg-gradient-to-r from-purple-700 to-purple-600 py-4 px-6">
+      <div class="flex items-center justify-center gap-2">
+      <img src={% static 'images/logo_white.png' %} height="35" width="35" />
+        <h1 class="text-xl font-bold text-white">TurfGrid</h1>
+      </div>
     </div>
 
-    <!-- Registration Form -->
-    <form class="space-y-6" method="POST" action="{% url 'register' %}" >
+    <div class="p-8 md:p-10 space-y-6">
+      <!-- Form Header -->
+      <div class="text-center">
+        <h2 class="text-3xl font-extrabold text-gray-900">
+          Create Your Account
+        </h2>
+        <p class="mt-2 text-gray-600">
+          Join TurfGrid to start booking fields instantly
+        </p>
+      </div>
+
+      <!-- Registration Form -->
+      <form class="space-y-6" method="POST" action="{% url 'register' %}" novalidate>
         {% csrf_token %}
+        
+        {% if form.errors %}
+          <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800">
+                  There were errors with your submission
+                </h3>
+                <div class="mt-2 text-sm text-red-700">
+                  <ul class="list-disc pl-5 space-y-1">
+                    {% for field in form %}
+                      {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                      {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="id_first_name" class="block text-sm font-medium text-gray-700">
+              First Name
+              <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="id_first_name"
+              name="first_name"
+              type="text"
+              required
+              class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+              value="{{ form.first_name.value|default:'' }}"
+            >
+          </div>
+          <div>
+            <label for="id_last_name" class="block text-sm font-medium text-gray-700">
+              Last Name
+              <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="id_last_name"
+              name="last_name"
+              type="text"
+              required
+              class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+              value="{{ form.last_name.value|default:'' }}"
+            >
+          </div>
+        </div>
+
         <div>
-          <label
-            for="first-name"
-            class="block text-sm font-medium text-gray-700"
-            >First Name</label
-          >
+          <label for="id_email" class="block text-sm font-medium text-gray-700">
+            Email Address
+            <span class="text-red-500">*</span>
+          </label>
           <input
-            id="first-name"
-            name="fname"
-            type="text"
+            id="id_email"
+            name="email"
+            type="email"
+            autocomplete="email"
             required
-            class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-          />
+            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+            value="{{ form.email.value|default:'' }}"
+          >
         </div>
+
         <div>
-          <label for="last-name" class="block text-sm font-medium text-gray-700"
-            >Last Name</label
-          >
-          <input
-            id="lname"
-            name="lname"
-            type="text"
-            required
-            class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-          />
+          <label for="id_phone" class="block text-sm font-medium text-gray-700">
+            Phone Number
+            <span class="text-red-500">*</span>
+          </label>
+          <div class="mt-1 flex rounded-lg shadow-sm">
+            <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
+              +91
+            </span>
+            <input
+              type="tel"
+              name="phone"
+              id="id_phone"
+              required
+              class="flex-1 block w-full min-w-0 px-4 py-3 border-gray-300 rounded-none rounded-r-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+              value="{{ form.phone.value|default:'' }}"
+            >
+          </div>
         </div>
-      </div>
 
-      <div>
-        <label
-          for="email-address"
-          class="block text-sm font-medium text-gray-700"
-          >Email address</label
-        >
-        <input
-          id="email-address"
-          name="email"
-          type="email"
-          autocomplete="email"
-          required
-          class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-        />
-      </div>
-
-      <div>
-        <label
-          for="phone-number"
-          class="block text-sm font-medium text-gray-700"
-          >Phone Number</label
-        >
-        <div class="mt-1 flex rounded-lg shadow-sm">
-          <span
-            class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 text-gray-500 sm:text-sm"
-          >
-            +91
-          </span>
-          <input
-            type="tel"
-            name="phone"
-            id="phone-number"
-            required
-            class="flex-1 block w-full min-w-0 px-4 py-3 bg-gray-50 border-gray-300 rounded-none rounded-r-lg placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-          />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="id_password1" class="block text-sm font-medium text-gray-700">
+              Password
+              <span class="text-red-500">*</span>
+            </label>
+            <div class="relative mt-1">
+              <input
+                id="id_password1"
+                name="password1"
+                type="password"
+                autocomplete="new-password"
+                required
+                class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm pr-10"
+              >
+              <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                </svg>
+              </div>
+            </div>
+            <p class="mt-1 text-xs text-gray-500">
+              Must be at least 8 characters
+            </p>
+          </div>
+          <div>
+            <label for="id_password2" class="block text-sm font-medium text-gray-700">
+              Confirm Password
+              <span class="text-red-500">*</span>
+            </label>
+            <div class="relative mt-1">
+              <input
+                id="id_password2"
+                name="password2"
+                type="password"
+                autocomplete="new-password"
+                required
+                class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm pr-10"
+              >
+              <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="flex items-start">
+          <div class="flex items-center h-5">
+            <input
+              id="terms"
+              name="terms"
+              type="checkbox"
+              required
+              class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded"
+            >
+          </div>
+          <div class="ml-3 text-sm">
+            <label for="terms" class="font-medium text-gray-700">
+              I agree to the
+              <a href="/terms" class="text-purple-600 hover:text-purple-500">
+                Terms and Conditions
+              </a>
+              <span class="text-red-500">*</span>
+            </label>
+            <p class="text-gray-500">
+              You must agree to the terms to register
+            </p>
+          </div>
+        </div>
+
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700"
-            >Password</label
+          <button
+            type="submit"
+            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-lg font-semibold rounded-full text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-300 shadow-lg transform hover:scale-[1.02]"
           >
-          <input
-            id="password"
-            name="password1"
-            type="password"
-            autocomplete="new-password"
-            required
-            class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-          />
+            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+              <svg class="h-5 w-5 text-purple-300 group-hover:text-purple-200 transition duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            Create Account
+          </button>
         </div>
-        <div>
-          <label
-            for="confirm-password"
-            class="block text-sm font-medium text-gray-700"
-            >Confirm Password</label
-          >
-          <input
-            id="confirm-password"
-            name="password2"
-            type="password"
-            autocomplete="new-password"
-            required
-            class="mt-1 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-          />
-        </div>
-      </div>
+      </form>
 
-      <div class="flex items-center">
-        <input
-          id="terms-and-conditions"
-          name="terms_and_conditions"
-          type="checkbox"
-          required
-          class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
-        />
-        <label
-          for="terms-and-conditions"
-          class="ml-2 block text-sm text-gray-900"
-        >
-          I agree to the
+      <!-- Login Link -->
+      <div class="text-center">
+        <p class="text-sm text-gray-600">
+          Already have an account?
           <a
-            href="/terms"
+            href="{% url 'login' %}"
             class="font-medium text-purple-600 hover:text-purple-500"
-            >Terms and Conditions</a
           >
-        </label>
-      </div> 
-
-      <div>
-        <button
-          type="submit"
-          class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-lg font-semibold rounded-full text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-300 shadow-lg transform hover:scale-105"
-        >
-          Create Account
-        </button>
+            Sign in
+          </a>
+        </p>
       </div>
-    </form>
-
-    <!-- Login Link -->
-    <div class="text-center">
-      <p class="text-sm text-gray-600">
-        Already have an account?
-        <a
-          href="{% url 'login' %}"
-          class="font-medium text-purple-600 hover:text-purple-500"
-        >
-          Sign in
-        </a>
-      </p>
     </div>
   </div>
 </main>
