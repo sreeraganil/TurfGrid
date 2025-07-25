@@ -1,7 +1,6 @@
 # Keep your actual source static files
 # Ignore only the collected output
 /staticfiles/
-/*.py[cod]
 __pycache__/
 /.env
 db.sqlite3
