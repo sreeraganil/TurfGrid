@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'core',
+    'turf',
 ]
 
 MIDDLEWARE = [
@@ -120,7 +121,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Media files
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / "media"  # For user-uploaded images (optional)
+MEDIA_ROOT = BASE_DIR / "media" 
 
 
 # Default primary key field type

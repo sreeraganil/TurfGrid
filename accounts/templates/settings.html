@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block title %}Account Settings - TurfGrid{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="flex flex-col md:flex-row gap-8">
+      <!-- Sidebar Navigation -->
+      <div class="md:w-1/4 lg:w-1/5">
+        <div class="bg-white rounded-xl shadow-sm p-6 sticky top-6">
+          <h2 class="text-lg font-bold text-gray-900 mb-6">Account Settings</h2>
+          <nav class="space-y-1">
+            <a href="#profile" class="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-purple-700 bg-purple-50">
+              <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              Profile
+            </a>
+            <a href="#password" class="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+              <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              Password
+            </a>
+            <a href="#notifications" class="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+              <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+              Notifications
+            </a>
+            <a href="#billing" class="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+              <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg>
+              Billing
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="md:w-3/4 lg:w-4/5 space-y-8">
+        <!-- Profile Section -->
+        <section id="profile" class="bg-white rounded-xl shadow-sm p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-900">Profile Information</h2>
+          </div>
+          
+          <form class="space-y-6">
+            <div class="flex items-center space-x-6">
+              <div class="shrink-0">
+                <img class="h-16 w-16 rounded-full object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User profile">
+              </div>
+              <div>
+                <button type="button" class="text-sm font-medium text-purple-600 hover:text-purple-500">
+                  Change photo
+                </button>
+                <p class="text-xs text-gray-500 mt-1">JPG, GIF or PNG. Max size of 2MB</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
+                <input type="text" id="first-name" value="{{ request.user.fname }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+              </div>
+              <div>
+                <label for="last-name" class="block text-sm font-medium text-gray-700">Last name</label>
+                <input type="text" id="last-name" value="{{ request.user.lname }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+              </div>
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+              <input type="email" id="email" value="{{ request.user.email }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+            </div>
+
+            <div>
+              <label for="phone" class="block text-sm font-medium text-gray-700">Phone number</label>
+              <input type="tel" id="phone" value="{{ request.user.phone }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+            </div>
+
+            <div class="flex justify-end">
+              <button type="button" class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                Cancel
+              </button>
+              <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                Save
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Password Section -->
+        <section id="password" class="bg-white rounded-xl shadow-sm p-6 hidden">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-900">Change Password</h2>
+          </div>
+          
+          <form class="space-y-6" method='post' action='{% url 'update_password' %}'>
+            {% csrf_token %}
+            <div>
+              <label for="current-password" class="block text-sm font-medium text-gray-700">Current password</label>
+              <input type="password" id="current-password" name='current_password' class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+            </div>
+
+            <div>
+              <label for="new-password" class="block text-sm font-medium text-gray-700">New password</label>
+              <input type="password" id="new-password" name='new_password' class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+            </div>
+
+            <div>
+              <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm new password</label>
+              <input type="password" id="confirm-password" name='confirm_password' class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+            </div>
+
+            <div class="flex justify-end">
+              <button type="button" class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                Cancel
+              </button>
+              <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                Update Password
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Notifications Section -->
+        <section id="notifications" class="bg-white rounded-xl shadow-sm p-6 hidden">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-900">Notification Preferences</h2>
+          </div>
+          
+          <form class="space-y-6">
+            <fieldset>
+              <legend class="text-base font-medium text-gray-900">Email Notifications</legend>
+              <div class="mt-4 space-y-4">
+                <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                    <input id="booking-confirmations" name="booking-confirmations" type="checkbox" checked class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded">
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="booking-confirmations" class="font-medium text-gray-700">Booking confirmations</label>
+                    <p class="text-gray-500">Receive emails when bookings are confirmed</p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                    <input id="booking-reminders" name="booking-reminders" type="checkbox" checked class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded">
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="booking-reminders" class="font-medium text-gray-700">Booking reminders</label>
+                    <p class="text-gray-500">Receive reminders before your bookings</p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                    <input id="promotional" name="promotional" type="checkbox" class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded">
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="promotional" class="font-medium text-gray-700">Promotional offers</label>
+                    <p class="text-gray-500">Receive special offers and discounts</p>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="mt-6">
+              <legend class="text-base font-medium text-gray-900">Push Notifications</legend>
+              <div class="mt-4 space-y-4">
+                <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                    <input id="push-bookings" name="push-bookings" type="checkbox" checked class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded">
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="push-bookings" class="font-medium text-gray-700">Booking updates</label>
+                    <p class="text-gray-500">Receive push notifications for booking changes</p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                    <input id="push-reminders" name="push-reminders" type="checkbox" class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded">
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="push-reminders" class="font-medium text-gray-700">Reminders</label>
+                    <p class="text-gray-500">Receive push notifications before your bookings</p>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="flex justify-end">
+              <button type="button" class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                Cancel
+              </button>
+              <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                Save Preferences
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Billing Section -->
+        <section id="billing" class="bg-white rounded-xl shadow-sm p-6 hidden">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-900">Billing Information</h2>
+          </div>
+          
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-lg font-medium text-gray-900">Payment Method</h3>
+              <div class="mt-4 bg-gray-50 p-4 rounded-lg">
+                <div class="flex items-center">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" class="h-8 mr-4">
+                  <div>
+                    <p class="font-medium">Visa ending in 4242</p>
+                    <p class="text-sm text-gray-500">Expires 04/2024</p>
+                  </div>
+                  <button class="ml-auto text-sm font-medium text-purple-600 hover:text-purple-500">Update</button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-lg font-medium text-gray-900">Billing History</h3>
+              <div class="mt-4 overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
+                <table class="min-w-full divide-y divide-gray-300">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">Date</th>
+                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Amount</th>
+                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Invoice</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200 bg-white">
+                    <tr>
+                      <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">May 15, 2023</td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Turf Booking - Central Park</td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">$45.00</td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <a href="#" class="text-purple-600 hover:text-purple-500">View</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">April 28, 2023</td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Turf Booking - Riverside</td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">$60.00</td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <a href="#" class="text-purple-600 hover:text-purple-500">View</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Simple tab switching functionality
+  document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Update active state in sidebar
+      document.querySelectorAll('nav a').forEach(navLink => {
+        navLink.classList.remove('text-purple-700', 'bg-purple-50');
+        navLink.classList.add('text-gray-600', 'hover:text-gray-900', 'hover:bg-gray-100');
+      });
+      this.classList.add('text-purple-700', 'bg-purple-50');
+      this.classList.remove('text-gray-600', 'hover:text-gray-900', 'hover:bg-gray-100');
+      
+      // Hide all sections
+      document.querySelectorAll('section').forEach(section => {
+        section.classList.add('hidden');
+      });
+      
+      // Show selected section
+      const sectionId = this.getAttribute('href').substring(1);
+      document.getElementById(sectionId).classList.remove('hidden');
+    });
+  });
+</script>
+{% endblock %}

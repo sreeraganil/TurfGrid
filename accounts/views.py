@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib import messages
@@ -10,6 +10,7 @@ from .forms import CustomUserCreationForm
 def login_view(request):
     if request.user.is_authenticated :
         return redirect('dashboard')
+    
     if request.method == "POST":
         email = request.POST['email']
         password = request.POST['password']
@@ -52,4 +53,37 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'Logout successfull')
     return redirect('login')
+
+
+@login_required(login_url='login')
+def settings(request):
+    return render(request, 'settings.html')
+
+
+@login_required(login_url='login')
+def update_password(request):
+    if request.method == 'POST':
+        current = request.POST.get('current_password')
+        new = request.POST.get('new_password')
+        confirm = request.POST.get('confirm_password')
+
+        if not request.user.check_password(current):
+            messages.error(request, 'Current password is incorrect.')
+            return redirect('settings')
+        elif new != confirm:
+            messages.error(request, 'New passwords do not match.')
+            return redirect('settings')
+        elif len(new) < 8:
+            messages.error(request, 'New password must be at least 8 characters.')
+            return redirect('settings')
+        else:
+            request.user.set_password(new)
+            request.user.save()
+            update_session_auth_hash(request, request.user) 
+            messages.success(request, 'Password updated successfully.')
+            return redirect('dashboard')
+
+    return render(request, 'update_password.html')
+
+
 
