@@ -1,0 +1,25 @@
+.amenity-floodlights {
+  background-color: #fef3c7; /* yellow-100 */
+  color: #92400e;            /* yellow-800 */
+}
+
+.amenity-changing-rooms {
+  background-color: #dbeafe; /* blue-100 */
+  color: #1e40af;            /* blue-800 */
+}
+
+.amenity-parking {
+  background-color: #d1fae5; /* green-100 */
+  color: #065f46;            /* green-800 */
+}
+
+.amenity-water-facility {
+  background-color: #ede9fe; /* purple-100 */
+  color: #5b21b6;            /* purple-800 */
+}
+
+/* Optional default */
+.amenity-default {
+  background-color: #f3f4f6; /* gray-100 */
+  color: #374151;            /* gray-800 */
+}

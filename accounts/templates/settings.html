@@ -47,7 +47,8 @@
             <h2 class="text-xl font-bold text-gray-900">Profile Information</h2>
           </div>
           
-          <form class="space-y-6">
+          <form class="space-y-6" method='POST' action="{% url 'update_profile' %}">
+            {% csrf_token %}
             <div class="flex items-center space-x-6">
               <div class="shrink-0">
                 <img class="h-16 w-16 rounded-full object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User profile">
@@ -63,22 +64,22 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
-                <input type="text" id="first-name" value="{{ request.user.fname }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+                <input type="text" id="first-name" name="fname" value="{{ request.user.fname }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
               </div>
               <div>
                 <label for="last-name" class="block text-sm font-medium text-gray-700">Last name</label>
-                <input type="text" id="last-name" value="{{ request.user.lname }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+                <input type="text" id="last-name" name='lname' value="{{ request.user.lname }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
               </div>
             </div>
 
             <div>
               <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
-              <input type="email" id="email" value="{{ request.user.email }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+              <input type="email" id="email" disabled value="{{ request.user.email }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm cursor-not-allowed bg-gray-200">
             </div>
 
             <div>
               <label for="phone" class="block text-sm font-medium text-gray-700">Phone number</label>
-              <input type="tel" id="phone" value="{{ request.user.phone }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+              <input type="tel" id="phone" name='phone' value="{{ request.user.phone }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
             </div>
 
             <div class="flex justify-end">

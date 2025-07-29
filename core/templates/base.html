@@ -7,6 +7,8 @@
     <link rel='icon' href='{% static "images/logo.ico" %}' type="image/png" />
     <title>{% block title %}TurfGrid - Find & Reserve Your Perfect Pitch.{% endblock %}</title>
 
+    {% block extra_head %}{% endblock %}
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       setTimeout(() => {

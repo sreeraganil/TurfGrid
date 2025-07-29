@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+
+{% block title %}Central Park Turf - TurfGrid{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+  <!-- Turf Header -->
+  <div class="bg-gradient-to-r from-purple-700 to-purple-600 py-12 px-4 sm:px-6 lg:px-8 text-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end">
+        <div>
+          <h1 class="text-3xl font-bold">Central Park Turf</h1>
+          <div class="mt-2 flex items-center">
+            <div class="flex items-center bg-purple-800 px-2 py-1 rounded-md">
+              <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span>4.8 (128 reviews)</span>
+            </div>
+            <span class="ml-4 flex items-center">
+              <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              2.5 km from center
+            </span>
+          </div>
+        </div>
+        <div class="mt-4 md:mt-0 flex space-x-3">
+          <button class="p-2 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
+          </button>
+          <button class="p-2 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Left Column -->
+      <div class="lg:w-2/3">
+        <!-- Image Gallery -->
+        <div class="mb-8">
+          <div class="relative rounded-xl overflow-hidden h-96 bg-gray-200">
+            <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1543357486-cf2711c932d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Central Park Turf">
+            <div class="absolute bottom-4 left-4 bg-white px-3 py-1 rounded-full shadow-sm text-sm font-medium">
+              <span class="text-purple-600">₹800</span> per hour
+            </div>
+          </div>
+          <div class="grid grid-cols-4 gap-2 mt-2">
+            <div class="h-24 bg-gray-200 rounded-lg overflow-hidden">
+              <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Turf image 1">
+            </div>
+            <div class="h-24 bg-gray-200 rounded-lg overflow-hidden">
+              <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Turf image 2">
+            </div>
+            <div class="h-24 bg-gray-200 rounded-lg overflow-hidden">
+              <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Turf image 3">
+            </div>
+            <div class="h-24 bg-gray-200 rounded-lg overflow-hidden">
+              <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Turf image 4">
+            </div>
+          </div>
+        </div>
+
+        <!-- Turf Details -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+          <h2 class="text-xl font-bold text-gray-900 mb-4">About This Turf</h2>
+          <p class="text-gray-600 mb-6">
+            Central Park Turf is a premium football facility located in the heart of the city. 
+            Our well-maintained artificial grass surface provides excellent playing conditions year-round. 
+            The turf is FIFA-certified and suitable for both casual games and competitive matches.
+          </p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-lg font-medium text-gray-900 mb-3">Features</h3>
+              <ul class="space-y-2">
+                <li class="flex items-center">
+                  <svg class="h-5 w-5 text-purple-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  FIFA-certified artificial grass
+                </li>
+                <li class="flex items-center">
+                  <svg class="h-5 w-5 text-purple-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  Professional floodlighting
+                </li>
+                <li class="flex items-center">
+                  <svg class="h-5 w-5 text-purple-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  Secure parking available
+                </li>
+                <li class="flex items-center">
+                  <svg class="h-5 w-5 text-purple-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  Changing rooms with showers
+                </li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 class="text-lg font-medium text-gray-900 mb-3">Specifications</h3>
+              <ul class="space-y-2">
+                <li class="flex justify-between">
+                  <span class="text-gray-600">Turf Size:</span>
+                  <span class="font-medium">40m x 20m</span>
+                </li>
+                <li class="flex justify-between">
+                  <span class="text-gray-600">Surface Type:</span>
+                  <span class="font-medium">Artificial Grass (3G)</span>
+                </li>
+                <li class="flex justify-between">
+                  <span class="text-gray-600">Capacity:</span>
+                  <span class="font-medium">7v7 or 5v5</span>
+                </li>
+                <li class="flex justify-between">
+                  <span class="text-gray-600">Minimum Booking:</span>
+                  <span class="font-medium">1 hour</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-900">Reviews</h2>
+            <button class="px-4 py-2 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50">
+              Write a Review
+            </button>
+          </div>
+          
+          <div class="space-y-6">
+            <!-- Review 1 -->
+            <div class="border-b border-gray-200 pb-6">
+              <div class="flex items-center mb-3">
+                <div class="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">
+                  RK
+                </div>
+                <div class="ml-4">
+                  <h4 class="font-medium">Rahul Kumar</h4>
+                  <div class="flex items-center">
+                    <div class="flex">
+                      <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    </div>
+                    <span class="ml-2 text-sm text-gray-500">2 weeks ago</span>
+                  </div>
+                </div>
+              </div>
+              <p class="text-gray-600">
+                One of the best turfs in the city! The surface is excellent and well-maintained. 
+                The floodlights are perfect for evening games. Staff is very cooperative.
+              </p>
+            </div>
+            
+            <!-- Review 2 -->
+            <div class="border-b border-gray-200 pb-6">
+              <div class="flex items-center mb-3">
+                <div class="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">
+                  PS
+                </div>
+                <div class="ml-4">
+                  <h4 class="font-medium">Priya Sharma</h4>
+                  <div class="flex items-center">
+                    <div class="flex">
+                      <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="h-4 w-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    </div>
+                    <span class="ml-2 text-sm text-gray-500">1 month ago</span>
+                  </div>
+                </div>
+              </div>
+              <p class="text-gray-600">
+                Great facility overall. The turf quality is excellent and the changing rooms are clean. 
+                Only suggestion would be to add more water coolers around the field.
+              </p>
+            </div>
+          </div>
+          
+          <button class="mt-6 w-full px-4 py-2 border border-gray-300 rounded-lg text-purple-600 hover:bg-gray-50">
+            Show all 128 reviews
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column - Booking Widget -->
+      <div class="lg:w-1/3">
+        <div class="bg-white rounded-xl shadow-sm p-6 sticky top-6">
+          <h2 class="text-xl font-bold text-gray-900 mb-4">Book This Turf</h2>
+          
+          <div class="space-y-4">
+            <div>
+              <label for="booking-date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+              <input type="date" id="booking-date" class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500">
+            </div>
+            
+            <div>
+              <label for="booking-time" class="block text-sm font-medium text-gray-700 mb-1">Time Slot</label>
+              <select id="booking-time" class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500">
+                <option>Select a time slot</option>
+                <option>6:00 AM - 7:00 AM</option>
+                <option>7:00 AM - 8:00 AM</option>
+                <option>8:00 AM - 9:00 AM</option>
+                <option>4:00 PM - 5:00 PM</option>
+                <option>5:00 PM - 6:00 PM</option>
+                <option>6:00 PM - 7:00 PM</option>
+                <option>7:00 PM - 8:00 PM</option>
+                <option>8:00 PM - 9:00 PM</option>
+              </select>
+            </div>
+            
+            <div>
+              <label for="booking-hours" class="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+              <select id="booking-hours" class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500">
+                <option>1 hour</option>
+                <option>2 hours</option>
+                <option>3 hours</option>
+              </select>
+            </div>
+            
+            <div class="pt-4 border-t border-gray-200">
+              <div class="flex justify-between mb-2">
+                <span class="text-gray-600">₹800 x 1 hour</span>
+                <span class="font-medium">₹800</span>
+              </div>
+              <div class="flex justify-between mb-2">
+                <span class="text-gray-600">Service fee</span>
+                <span class="font-medium">₹80</span>
+              </div>
+              <div class="flex justify-between text-lg font-bold mt-4 pt-4 border-t border-gray-200">
+                <span>Total</span>
+                <span>₹880</span>
+              </div>
+            </div>
+            
+            <button class="w-full px-4 py-3 border border-transparent text-lg font-medium rounded-lg shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+              Book Now
+            </button>
+            
+            <p class="text-xs text-gray-500 text-center">
+              You won't be charged yet. Free cancellation up to 24 hours before booking.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Location Map -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mt-6">
+          <h2 class="text-xl font-bold text-gray-900 mb-4">Location</h2>
+          <div class="h-64 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+            <div class="text-center">
+              <svg class="h-12 w-12 text-gray-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <p class="mt-2 text-gray-600">Map placeholder</p>
+              <p class="text-sm text-gray-500">123 Sports Avenue, Central Park</p>
+            </div>
+          </div>
+          <button class="mt-4 w-full px-4 py-2 border border-gray-300 rounded-lg text-purple-600 hover:bg-gray-50">
+            Get Directions
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

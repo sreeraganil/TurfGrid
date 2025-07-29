@@ -1,3 +1,38 @@
 from django.contrib import admin
+from .models import Turf, TurfSchedule, TurfBooking, TurfReview, Amenity
 
-# Register your models here.
+
+@admin.register(Amenity)
+class AmenityAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+@admin.register(Turf)
+class TurfAdmin(admin.ModelAdmin):
+    list_display = ('name', 'sport_type', 'owner', 'is_active', 'created_at')
+    list_filter = ('sport_type', 'surface_type', 'is_active')
+    search_fields = ('name', 'address', 'city')
+    prepopulated_fields = {'slug': ('name',)}
+    autocomplete_fields = ['owner']
+
+
+@admin.register(TurfSchedule)
+class TurfScheduleAdmin(admin.ModelAdmin):
+    list_display = ('turf', 'day', 'start_time', 'end_time', 'price', 'is_peak', 'is_available')
+    list_filter = ('day', 'is_peak', 'is_available')
+    search_fields = ('turf__name',)
+
+
+@admin.register(TurfBooking)
+class TurfBookingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'turf', 'user', 'booking_date', 'start_time', 'end_time', 'status', 'total_amount')
+    list_filter = ('status', 'booking_date')
+    search_fields = ('turf__name', 'user__username')
+    autocomplete_fields = ['turf', 'user']
+
+
+@admin.register(TurfReview)
+class TurfReviewAdmin(admin.ModelAdmin):
+    list_display = ('turf', 'user', 'rating', 'created_at')
+    list_filter = ('rating',)
+    search_fields = ('turf__name', 'user__username')
+    autocomplete_fields = ['turf', 'user']

@@ -83,7 +83,26 @@ def update_password(request):
             messages.success(request, 'Password updated successfully.')
             return redirect('dashboard')
 
-    return render(request, 'update_password.html')
+    return render(request, 'settings.html')
+
+
+@login_required(login_url='login')
+def update_profile(request):
+    if request.method == 'POST':
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        phone = request.POST['phone']
+
+        request.user.fname = fname
+        request.user.lname = lname
+        request.user.phone = phone
+
+        request.user.save()
+        messages.success(request, "Profile updated successfully")
+        return redirect('settings')
+    
+    return render(request, 'settings.html')
+
 
 
 
