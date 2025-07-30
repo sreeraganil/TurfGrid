@@ -4,11 +4,11 @@ from .models import Turf, TurfSchedule, TurfBooking, TurfReview, Amenity
 
 @admin.register(Amenity)
 class AmenityAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('id', 'name',)
 
 @admin.register(Turf)
 class TurfAdmin(admin.ModelAdmin):
-    list_display = ('name', 'sport_type', 'owner', 'is_active', 'created_at')
+    list_display = ('name', 'slug', 'sport_type', 'owner', 'is_active', 'created_at')
     list_filter = ('sport_type', 'surface_type', 'is_active')
     search_fields = ('name', 'address', 'city')
     prepopulated_fields = {'slug': ('name',)}
