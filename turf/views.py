@@ -1,13 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Turf, Amenity, TurfBooking
 from django.db.models import Q
 from datetime import datetime
+from django.contrib import messages
+from django.views.decorators.cache import never_cache
 
+@never_cache
 def find_turf(request):
-    # Start with all active turfs
-    turfs = Turf.objects.filter(is_active=True)
+    turfs = Turf.objects.filter(is_active = True, is_verified = True)
 
-    # --- Get all filter parameters from the request ---
     location_query = request.GET.get('location')
     date_query = request.GET.get('date')
     sport_types = request.GET.getlist('sport_type')
@@ -16,9 +17,6 @@ def find_turf(request):
     amenity_ids = request.GET.getlist('amenities')
     sort_by = request.GET.get('sort_by')
 
-    # --- Apply filters based on parameters ---
-
-    # Location filter (searches name, location, and address)
     if location_query:
         turfs = turfs.filter(
             Q(name__icontains=location_query) |
@@ -26,26 +24,20 @@ def find_turf(request):
             Q(address__icontains=location_query)
         )
 
-    # Date availability filter
     if date_query:
         try:
             booking_date = datetime.strptime(date_query, '%Y-%m-%d').date()
-            # Find IDs of turfs that have a confirmed booking on that date
             booked_turf_ids = TurfBooking.objects.filter(
                 booking_date=booking_date,
                 status='confirmed'
             ).values_list('turf_id', flat=True)
-            # Exclude these turfs from the main queryset
             turfs = turfs.exclude(id__in=booked_turf_ids)
         except ValueError:
-            # Handle invalid date format gracefully
             pass
 
-    # Sport Type filter
     if sport_types:
         turfs = turfs.filter(sport_type__in=sport_types)
 
-    # Price Range filter
     if min_price:
         try:
             turfs = turfs.filter(price_per_hour__gte=float(min_price))
@@ -57,20 +49,26 @@ def find_turf(request):
         except (ValueError, TypeError):
             pass
 
-    # Amenities filter (finds turfs with ANY of the selected amenities)
+    
     if amenity_ids:
-        # The .distinct() is crucial to avoid duplicates
         turfs = turfs.filter(amenities__in=amenity_ids).distinct()
 
-    # --- Apply Sorting ---
     if sort_by == 'price_asc':
         turfs = turfs.order_by('price_per_hour')
     elif sort_by == 'price_desc':
         turfs = turfs.order_by('-price_per_hour')
     elif sort_by == 'rating':
         turfs = turfs.order_by('-rating')
-    else: # Default sort
+    else:
         turfs = turfs.order_by('-created_at')
+
+
+    selected_sports = request.GET.getlist('sport_type')
+    selected_amenities = request.GET.getlist('amenities')
+
+    favourited_turf_ids = []
+    if request.user.is_authenticated:
+        favourited_turf_ids = [fav.turf.id for fav in request.user.favourites.all()]
 
 
     context = {
@@ -78,9 +76,12 @@ def find_turf(request):
         'count': turfs.count(),
         'amenities': Amenity.objects.all(),
         'sport_choices': Turf.SPORT_CHOICES,
-        # Pass submitted values back to template to keep filters active
-        'values': request.GET
+        'selected_sports': selected_sports,
+        'selected_amenities': selected_amenities,
+        'values': request.GET,
+        'favourited_turf_ids': favourited_turf_ids
     }
+
     return render(request, 'find_turf.html', context)
 
 
@@ -88,7 +89,6 @@ def turf_detail(request, slug):
     turf = Turf.objects.get(slug = slug)
     absolute_url = request.build_absolute_uri()
 
-    # Conditionally build image URL to prevent errors if no image exists
     og_image_url = None
     if turf.image:
         og_image_url = request.build_absolute_uri(turf.image.url)
@@ -99,3 +99,55 @@ def turf_detail(request, slug):
         'og_image_url': og_image_url,
     }
     return render(request, 'turf_detail.html', context)
+
+
+
+
+def add_turf(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        sport_type = request.POST.get('sport_type')
+        description = request.POST.get('description')
+        location = request.POST.get('location')
+        address = request.POST.get('address')
+        length = request.POST.get('length')
+        width = request.POST.get('width')
+        surface_type = request.POST.get('surface_type')
+        capacity = request.POST.get('capacity')
+        price_per_hour = request.POST.get('price_per_hour')
+        minimum_booking_duration = request.POST.get('minimum_booking_duration')
+        opening = request.POST.get('opening')
+        closing = request.POST.get('closing')
+        status = request.POST.get('status')
+        image = request.FILES.get('image')
+        amenities = request.POST.getlist('amenities')
+
+        turf = Turf.objects.create(
+            owner=request.user,
+            name=name,
+            sport_type=sport_type,
+            description=description,
+            location=location,
+            address=address,
+            length=length,
+            width=width,
+            surface_type=surface_type,
+            capacity=capacity,
+            price_per_hour=price_per_hour,
+            minimum_booking_duration=minimum_booking_duration,
+            opening=opening,
+            closing=closing,
+            status=status,
+            image=image
+        )
+        turf.amenities.set(amenities)
+
+        messages.success(request, "Turf added successfully")
+        
+        return redirect('owner_dashboard')
+
+    context = {
+        'amenities': Amenity.objects.all()
+    }
+    return render(request, 'add_turf.html', context)
+

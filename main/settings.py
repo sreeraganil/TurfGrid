@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'accounts',
     'core',
     'turf',
+    'owner',
 ]
 
 MIDDLEWARE = [

@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
 from accounts.models import User
+from accounts.models import User
 
 class Amenity(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -27,10 +28,15 @@ class Turf(models.Model):
         ('hard', 'Hard'),
         ('synthetic', 'Synthetic'),
     ]
+    STATUS_CHOICES = [
+        ("open", "Open"),
+        ("closed", "Closed"),
+        ("maintenance", "Under Maintenance"),
+    ]
 
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role__in': ['owner', 'admin']},)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role__in': ['owner', 'admin']}, related_name='turf')
     sport_type = models.CharField(max_length=20, choices=SPORT_CHOICES)
     description = models.TextField()
     location = models.CharField(max_length=255)
@@ -45,8 +51,12 @@ class Turf(models.Model):
     rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], default=0)
     amenities = models.ManyToManyField(Amenity, blank=True)
     minimum_booking_duration = models.IntegerField(default=1)
+    opening = models.TimeField()
+    closing = models.TimeField()
+    status = models.CharField(choices = STATUS_CHOICES, default='open')
+    is_verified = models.BooleanField(default=False)
 
-    image = models.ImageField(upload_to='turfs/images/', null=True, blank=True)  # Primary image
+    image = models.ImageField(upload_to='turfs/images/', null=True, blank=True) 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -102,3 +112,16 @@ class TurfReview(models.Model):
 
     class Meta:
         unique_together = ['turf', 'user']
+
+
+class Favourite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favourites')
+    turf = models.ForeignKey(Turf, on_delete=models.CASCADE, related_name='favourited_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'turf')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user} favourited {self.turf.name}"

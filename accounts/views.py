@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib import messages
 from .forms import CustomUserCreationForm
+from turf.models import Favourite, Turf
 
 
 @never_cache
@@ -92,10 +93,12 @@ def update_profile(request):
         fname = request.POST['fname']
         lname = request.POST['lname']
         phone = request.POST['phone']
+        profile_pic = request.FILES.get('image')
 
         request.user.fname = fname
         request.user.lname = lname
         request.user.phone = phone
+        request.user.profile_pic = profile_pic
 
         request.user.save()
         messages.success(request, "Profile updated successfully")
@@ -105,4 +108,14 @@ def update_profile(request):
 
 
 
+@login_required
+@never_cache
+def toggle_favourite(request, turf_id):
+    turf = get_object_or_404(Turf, id=turf_id)
+    favourite, created = Favourite.objects.get_or_create(user=request.user, turf=turf)
+    print(f"-----------------------------{turf_id}---------------------")
 
+    if not created:
+        favourite.delete()
+    
+    return redirect('find_turf')

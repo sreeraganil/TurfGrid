@@ -9,4 +9,5 @@ urlpatterns = [
     path('settings/', views.settings, name = 'settings'),
     path('update-password/', views.update_password, name = 'update_password'),
     path('update-profile/', views.update_profile, name = 'update_profile'),
+    path('toggle-favourite/<int:turf_id>', views.toggle_favourite, name = 'toggle_favourite'),
 ]

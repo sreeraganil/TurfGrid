@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Turf, TurfSchedule, TurfBooking, TurfReview, Amenity
+from .models import Turf, TurfSchedule, TurfBooking, TurfReview, Amenity, Favourite
 
 
 @admin.register(Amenity)
@@ -8,7 +8,7 @@ class AmenityAdmin(admin.ModelAdmin):
 
 @admin.register(Turf)
 class TurfAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'sport_type', 'owner', 'is_active', 'created_at')
+    list_display = ('id', 'name', 'slug', 'sport_type','is_verified', 'owner', 'is_active', 'created_at')
     list_filter = ('sport_type', 'surface_type', 'is_active')
     search_fields = ('name', 'address', 'city')
     prepopulated_fields = {'slug': ('name',)}
@@ -36,3 +36,10 @@ class TurfReviewAdmin(admin.ModelAdmin):
     list_filter = ('rating',)
     search_fields = ('turf__name', 'user__username')
     autocomplete_fields = ['turf', 'user']
+
+
+@admin.register(Favourite)
+class FavouriteAdmin(admin.ModelAdmin):
+    list_display = ['user', 'turf', 'created_at']
+    list_filter = ['created_at']
+    search_fields = ['user__email', 'turf__name']

@@ -11,3 +11,4 @@ def landing_view(request):
 @login_required(login_url='login')
 def dashboard(request):
     return render(request, 'dashboard.html')
+

@@ -40,11 +40,14 @@
               <h3 class="text-sm font-medium text-gray-700 mb-2">Sport Type</h3>
               <div class="space-y-2">
                 {% for value, display in sport_choices %}
-                <div class="flex items-center">
-                  <input id="sport-{{ value }}" name="sport_type" value="{{ value }}" type="checkbox" {% if value in values.getlist.sport_type %}checked{% endif %} class="h-4 w-4 text-purple-600 rounded"/>
-                  <label for="sport-{{ value }}" class="ml-2 text-sm text-gray-700">{{ display }}</label>
-                </div>
+                  <div class="flex items-center">
+                    <input id="sport-{{ value }}" name="sport_type" value="{{ value }}" type="checkbox"
+                      {% if value in selected_sports %}checked{% endif %}
+                      class="h-4 w-4 text-purple-600 rounded" />
+                    <label for="sport-{{ value }}" class="ml-2 text-sm text-gray-700">{{ display }}</label>
+                  </div>
                 {% endfor %}
+
               </div>
             </div>
 
@@ -60,11 +63,17 @@
               <h3 class="text-sm font-medium text-gray-700 mb-2">Amenities</h3>
               <div class="space-y-2">
                 {% for amenity in amenities %}
-                <div class="flex items-center">
-                  <input id="amenity-{{ amenity.pk }}" name="amenities" value="{{ amenity.pk }}" type="checkbox" {% if amenity.pk|stringformat:"s" in values.getlist.amenities %}checked{% endif %} class="h-4 w-4 text-purple-600 rounded"/>
-                  <label for="amenity-{{ amenity.pk }}" class="ml-2 text-sm text-gray-700">{{ amenity.name }}</label>
-                </div>
+                  <div class="flex items-center">
+                    <input id="amenity-{{ amenity.pk }}"
+                          name="amenities"
+                          value="{{ amenity.id }}"
+                          type="checkbox"
+                          {% if amenity.id|stringformat:"s" in selected_amenities %}checked{% endif %}
+                          class="h-4 w-4 text-purple-600 rounded"/>
+                    <label for="amenity-{{ amenity.pk }}" class="ml-2 text-sm text-gray-700">{{ amenity.name }}</label>
+                  </div>
                 {% endfor %}
+
               </div>
             </div>
 
@@ -90,14 +99,22 @@
           <!-- Turf Card -->
           {% for turf in turfs %}
           <div
-            class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition duration-300"
+            class="relative rounded-xl shadow-sm overflow-hidden hover:shadow-md transition duration-300"
           >
             <div class="relative">
+              {% if turf.image %}
+              <img
+                class="w-full h-48 object-cover"
+                src="{{turf.image.url}}"
+                alt="Football turf"
+              />
+              {% else %}
               <img
                 class="w-full h-48 object-cover"
                 src="https://placehold.co/600x400"
                 alt="Football turf"
               />
+              {% endif %}
               <div
                 class="absolute top-3 left-3 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded"
               >
@@ -115,25 +132,28 @@
                 </span>
               </div>
               <div class="absolute top-3 right-3">
-                <button
-                  type="button"
-                  class="p-2 bg-white rounded-full shadow-md text-gray-400 hover:text-purple-600 focus:outline-none"
+                <a
+                  href="{% url 'toggle_favourite' turf.id %}"
+                  class="flex items-center justify-center p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none"
+                  title="Toggle favourite"
                 >
                   <svg
-                    class="h-5 w-5"
-                    fill="none"
+                    class="h-5 w-5 transition-colors duration-300 ease-in-out"
+                    fill="{% if turf.id in favourited_turf_ids %}red{% else %}none{% endif %}"
+                    stroke="{% if turf.id in favourited_turf_ids %}red{% else %}currentColor{% endif %}"
                     viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
                       d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                     />
                   </svg>
-                </button>
+                </a>
               </div>
+
+
             </div>
             <div class="p-4 flex flex-col justify-between h-[calc(100%-192px)]">
               <div class="flex justify-between items-start">
@@ -198,11 +218,10 @@
             </div>
           </div>
           {% empty %}
-          <li>Sorry, no turfs are available at the moment.</li>
+          <div class="list-none">Sorry, no turfs are available at the moment.</div>
           {% endfor %}
-        </div>
-
           </div>
+        </div>
       </div>
     </div>
   </div>
