@@ -13,3 +13,6 @@ venv/
 .venv/
 ENV/
 .env/
+
+
+media
