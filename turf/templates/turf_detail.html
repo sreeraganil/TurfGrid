@@ -68,7 +68,7 @@
           </button>
           {% if user.is_authenticated %}
           <a
-                  href="{% url 'toggle_favourite' turf.id %}"
+                  href="{% url 'toggle_favourite' turf.id %}?next={{ request.path }}"
                   class="flex items-center justify-center p-2 bg-purple-400 rounded-full shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none"
                   title="Toggle favourite"
                 >

@@ -1,212 +1,294 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-violet-50 to-violet-100 p-4 md:p-8">
-  <div class="max-w-7xl mx-auto">
-    <!-- Header Section -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-      <div>
-        <h1 class="text-3xl md:text-4xl font-bold text-violet-900">Welcome back, {{ request.user.fname }} {{ request.user.lname }}</h1>
-        <p class="text-violet-700 mt-2">Here's what's happening with your turf bookings today</p>
-      </div>
-      <div class="flex items-center gap-4">
-        {% if request.user.role == 'owner' %}
-      <div class="mt-4 md:mt-0 flex space-x-3">
-        <a href="{% url 'owner_dashboard' %}" class="px-4 py-2 bg-white border border-violet-200 text-violet-700 font-medium rounded-lg hover:bg-violet-50 transition duration-200 flex items-center shadow-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-violet-700" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-          </svg>
-          Owner Dashboard
-        </a>
-      </div>
-      {% endif %}
-      <div class="mt-4 md:mt-0 flex space-x-3 ">
-        <a href="{% url 'logout' %}" class="px-4 py-2 bg-red-600 border border-white text-white font-medium rounded-lg hover:bg-red-700 transition duration-200 flex items-center shadow-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-white" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
-          </svg>
-          Logout
-        </a>
-      </div>
-      </div>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<div class="bg-gradient-to-r from-purple-800 to-purple-700 py-3 px-6 shadow-md">
+    <div class="flex items-center justify-center gap-2">
+        <img src="{% static 'images/logo_white.png' %}" height="35" width="35" />
+        <h1 class="text-xl font-bold text-white">TurfGrid</h1>
+    </div>
+</div>
+
+<div class="min-h-screen bg-gradient-to-br from-purple-700 to-purple-600 p-4 md:p-6">
+    <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Header with Profile -->
+        <header class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Profile Card -->
+            <div class="md:col-span-2 bg-purple-50 rounded-2xl p-5 shadow-sm border border-purple-200">
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        {% if request.user.profile_pic %}
+                        <img src="{{ request.user.profile_pic.url }}" alt="Profile" class="w-16 h-16 rounded-full object-cover border-4 border-purple-300">
+                        {% else %}
+                        <div class="w-16 h-16 rounded-full bg-purple-200 border-4 border-purple-300 flex items-center justify-center text-purple-800 text-2xl font-bold">
+                            {{ request.user.fname|first|upper }}
+                        </div>
+                        {% endif %}
+                        <span class="absolute bottom-0 right-0 w-5 h-5 bg-green-400 rounded-full border-2 border-purple-50"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h1 class="text-2xl md:text-3xl font-bold text-purple-900 truncate">Welcome, {{ request.user.fname }}</h1>
+                        <p class="text-purple-700 mt-1">Turf Booking Dashboard</p>
+                        <div class="flex gap-2 mt-2 flex-wrap">
+                            {% if request.user.role == 'owner' %}
+                            <span class="bg-indigo-200 text-indigo-800 text-xs px-2 py-1 rounded-full">Turf Owner</span>
+                            {% elif request.user.role == 'admin' %}
+                            <span class="bg-purple-200 text-purple-800 text-xs px-2 py-1 rounded-full">Admin</span>
+                            {% else %}
+                            <span class="bg-purple-200 text-purple-800 text-xs px-2 py-1 rounded-full">Member</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="flex flex-col sm:flex-row md:flex-col gap-3">
+                {% if request.user.role == 'owner' %}
+                <a href="{% url 'owner_dashboard' %}" class="px-4 py-3 bg-purple-100 border border-purple-300 text-purple-800 font-medium rounded-xl hover:bg-purple-200 transition flex items-center justify-center gap-2 shadow-sm hover:shadow-md flex-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Owner Panel
+                </a>
+                {% endif %}
+                <div x-data="{ open: false }" class="relative flex-1">
+                    <button @click="open = !open" class="w-full px-4 py-3 bg-purple-100 border border-purple-300 text-purple-800 font-medium rounded-xl hover:bg-purple-200 transition flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+                        My Account
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-200" :class="{'rotate-180': open}" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div x-show="open" @click.away="open = false" 
+                        x-transition:enter="transition ease-out duration-100"
+                        x-transition:enter-start="transform opacity-0 scale-95"
+                        x-transition:enter-end="transform opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-75"
+                        x-transition:leave-start="transform opacity-100 scale-100"
+                        x-transition:leave-end="transform opacity-0 scale-95"
+                        class="absolute right-0 mt-2 w-full bg-purple-50 rounded-xl shadow-lg py-2 z-10 border border-purple-200">
+                        <a href="{% url 'settings' %}" class="block px-4 py-2 text-sm text-purple-800 hover:bg-purple-100 transition">Settings</a>
+                        <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-purple-100 transition">Sign out</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats and Quick Actions Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-6 gap-5">
+            <!-- Stats Cards -->
+            <div class="md:col-span-4 grid grid-cols-1 sm:grid-cols-3 gap-5 my-7">
+    <!-- Upcoming Bookings -->
+    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border-2 border-purple-200 hover:border-purple-300 relative overflow-hidden">
+        <div class="absolute -right-4 -top-4 w-24 h-24 bg-purple-200 rounded-full opacity-20"></div>
+        <div class="relative z-10 flex flex-col h-full">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm font-semibold text-purple-700 uppercase tracking-wider">Upcoming Bookings</p>
+                    <h3 class="text-5xl text-center font-extrabold text-purple-700 mt-3 mb-4">3</h3>
+                </div>
+                <div class="p-3 bg-white/50 backdrop-blur-sm rounded-xl shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+            </div>
+            <a href="#" class="mt-auto inline-flex items-center justify-between px-4 py-2 bg-white/70 border border-purple-200 text-purple-700 font-medium rounded-lg hover:bg-white hover:text-purple-900 transition-all group">
+                <span>View schedule</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        </div>
     </div>
 
-    <!-- Stats Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-      <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-violet-500 hover:shadow-md transition duration-300">
-        <div class="flex justify-between items-start">
-          <div>
-            <p class="text-sm font-medium text-violet-600">Upcoming Bookings</p>
-            <h3 class="text-2xl font-bold text-violet-900 mt-1">3</h3>
-          </div>
-          <div class="p-3 bg-violet-100 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          </div>
+    <!-- Favorite Turfs -->
+    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border-2 border-purple-200 hover:border-purple-300 relative overflow-hidden">
+        <div class="absolute -right-4 -top-4 w-24 h-24 bg-purple-200 rounded-full opacity-20"></div>
+        <div class="relative z-10 flex flex-col h-full">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm font-semibold text-purple-700 uppercase tracking-wider">Favorite Turfs</p>
+                    <h3 class="text-5xl text-center font-extrabold text-purple-700 mt-3 mb-4">{{ request.user.favourites.all|length }}</h3>
+                </div>
+                <div class="p-3 bg-white/50 backdrop-blur-sm rounded-xl shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </div>
+            </div>
+            <a href="{% url 'favourites' %}" class="mt-auto inline-flex items-center justify-between px-4 py-2 bg-white/70 border border-purple-200 text-purple-700 font-medium rounded-lg hover:bg-white hover:text-purple-7 transition-all group">
+                <span>Manage favorites</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </a>
         </div>
-        <a href="#" class="mt-4 inline-flex items-center text-sm font-medium text-violet-600 hover:text-violet-800 transition duration-150">
-          View all
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </a>
-      </div>
-
-      <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-violet-500 hover:shadow-md transition duration-300">
-        <div class="flex justify-between items-start">
-          <div>
-            <p class="text-sm font-medium text-violet-600">Favorites</p>
-            <h3 class="text-2xl font-bold text-violet-900 mt-1">{{ request.user.favourites.all|length}} Turfs</h3>
-          </div>
-          <div class="p-3 bg-violet-100 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
-          </div>
-        </div>
-        <a href="#" class="mt-4 inline-flex items-center text-sm font-medium text-violet-600 hover:text-violet-800 transition duration-150">
-          Manage favorites
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </a>
-      </div>
-
-      <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-violet-500 hover:shadow-md transition duration-300">
-        <div class="flex justify-between items-start">
-          <div>
-            <p class="text-sm font-medium text-violet-600">Recent Activity</p>
-            <h3 class="text-2xl font-bold text-violet-900 mt-1">2 New</h3>
-          </div>
-          <div class="p-3 bg-violet-100 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-          </div>
-        </div>
-        <a href="#" class="mt-4 inline-flex items-center text-sm font-medium text-violet-600 hover:text-violet-800 transition duration-150">
-          View notifications
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </a>
-      </div>
     </div>
 
-    <!-- Main Actions -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- My Bookings Card -->
-      <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 group border border-violet-100">
-        <div class="flex items-center mb-4">
-          <div class="p-3 bg-violet-100 rounded-lg mr-4 group-hover:bg-violet-200 transition duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-          </div>
-          <h2 class="text-xl font-semibold text-violet-800">My Bookings</h2>
+    <!-- Notifications -->
+    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border-2 border-purple-200 hover:border-purple-300 relative overflow-hidden">
+        <div class="absolute -right-4 -top-4 w-24 h-24 bg-purple-200 rounded-full opacity-20"></div>
+        <div class="relative z-10 flex flex-col h-full">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm font-semibold text-purple-700 uppercase tracking-wider">Notifications</p>
+                    <h3 class="text-5xl text-center font-extrabold text-purple-700 mt-3 mb-4">2</h3>
+                </div>
+                <div class="p-3 bg-white/50 backdrop-blur-sm rounded-xl shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </div>
+            </div>
+            <a href="#" class="mt-auto inline-flex items-center justify-between px-4 py-2 bg-white/70 border border-purple-200 text-purple-700 font-medium rounded-lg hover:bg-white hover:text-purple-900 transition-all group">
+                <span>View alerts</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </a>
         </div>
-        <p class="text-violet-600 mb-4">View and manage all your turf bookings in one place.</p>
-        <a href="#" class="inline-flex items-center px-4 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-700 transition duration-300">
-          View Bookings
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </a>
-      </div>
-
-      <!-- Find a Turf Card -->
-      <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 group border border-violet-100">
-        <div class="flex items-center mb-4">
-          <div class="p-3 bg-violet-100 rounded-lg mr-4 group-hover:bg-violet-200 transition duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-          </div>
-          <h2 class="text-xl font-semibold text-violet-800">Find a Turf</h2>
-        </div>
-        <p class="text-violet-600 mb-4">Search and book available turfs based on your location and time.</p>
-        <a href="{% url 'find_turf' %}" class="inline-flex items-center px-4 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-700 transition duration-300">
-          Browse Turfs
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </a>
-      </div>
-
-      <!-- Account Settings Card -->
-      <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 group border border-violet-100">
-        <div class="flex items-center mb-4">
-          <div class="p-3 bg-violet-100 rounded-lg mr-4 group-hover:bg-violet-200 transition duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-          </div>
-          <h2 class="text-xl font-semibold text-violet-800">Account Settings</h2>
-        </div>
-        <p class="text-violet-600 mb-4">Update your profile, password, and notification preferences.</p>
-        <a href="{% url 'settings' %}" class="inline-flex items-center px-4 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-700 transition duration-300">
-          Manage Account
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </a>
-      </div>
     </div>
+</div>
 
-    <!-- Recent Bookings Section -->
-    <div class="mt-12 bg-white rounded-xl shadow-sm overflow-hidden">
-      <div class="p-6 border-b border-violet-100">
-        <h2 class="text-xl font-semibold text-violet-800">Recent Bookings</h2>
-      </div>
-      <div class="divide-y divide-violet-100">
-        <!-- Booking Item 1 -->
-        <div class="p-6 hover:bg-violet-50 transition duration-200">
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div class="mb-4 md:mb-0">
-              <h3 class="font-medium text-violet-900">Central Park Turf #2</h3>
-              <p class="text-sm text-violet-600 mt-1">Tomorrow, 4:00 PM - 6:00 PM</p>
+            <!-- Quick Book Button -->
+            <div class="md:col-span-2">
+                <a href="{% url 'find_turf' %}" class="h-full bg-gradient-to-r from-purple-500 to-purple-600 p-6 rounded-2xl shadow-md hover:shadow-lg transition flex flex-col justify-center items-center text-center group border border-purple-400">
+                    <div class="p-4 bg-white/20 rounded-full mb-4 group-hover:bg-white/30 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-white">Quick Book</h2>
+                    <p class="text-purple-100 mt-2">Book a turf in just few clicks</p>
+                    <span class="mt-4 inline-flex items-center px-4 py-2 bg-white/20 text-white text-sm font-medium rounded-full border border-white/30 hover:bg-white/30 transition">
+                        Book Now
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </a>
             </div>
-            <div class="flex space-x-3">
-              <a href="#" class="px-4 py-2 text-sm font-medium text-violet-700 bg-violet-100 rounded-lg hover:bg-violet-200 transition duration-200">
-                View Details
-              </a>
-              <a href="#" class="px-4 py-2 text-sm font-medium text-white bg-violet-600 rounded-lg hover:bg-violet-700 transition duration-200">
-                Manage
-              </a>
-            </div>
-          </div>
         </div>
-        
-        <!-- Booking Item 2 -->
-        <div class="p-6 hover:bg-violet-50 transition duration-200">
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div class="mb-4 md:mb-0">
-              <h3 class="font-medium text-violet-900">Riverside Sports Complex</h3>
-              <p class="text-sm text-violet-600 mt-1">Saturday, 10:00 AM - 12:00 PM</p>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Favorite Turfs Section -->
+            <div class="lg:col-span-2 bg-purple-50 rounded-2xl shadow-sm overflow-hidden border border-purple-200">
+                <div class="p-5 border-b border-purple-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-purple-900">Favorite Turfs</h2>
+                        <a href="{% url 'favourites' %}" class="text-sm font-medium text-purple-700 hover:text-purple-900 transition">View all</a>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 p-2">
+                    {% for turf in request.user.favourites.all|slice:":2" %}
+                    <div class="p-4 border-2 rounded-lg border-purple-200 hover:bg-purple-100 transition">
+                        <div class="h-40 bg-purple-200 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
+                            {% if turf.turf.image %}
+                            <img class="w-full h-full object-cover" src="{{turf.turf.image.url}}" alt='{{turf.turf.name}}' />
+                            {% else %}
+                            <span class="text-purple-900 font-medium">{{ turf.turf.name }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-medium text-purple-900 truncate">{{ turf.turf.name }}</h3>
+                                <p class="text-sm text-purple-700 mt-1 truncate">{{ turf.turf.location }}</p>
+                            </div>
+                            <span class="text-sm font-medium text-purple-800 whitespace-nowrap ml-2">₹{{ turf.turf.price_per_hour }}/hr</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-3">
+                            <a href="{% url 'turf_detail' turf.turf.slug %}" class="text-sm font-medium text-purple-700 hover:text-purple-900 transition flex items-center">
+                                View details
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                            <button class="text-purple-700 hover:text-purple-900 p-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="p-4 col-span-2 text-center text-purple-700">
+                        You haven't added any turfs to favorites yet
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="flex space-x-3">
-              <a href="#" class="px-4 py-2 text-sm font-medium text-violet-700 bg-violet-100 rounded-lg hover:bg-violet-200 transition duration-200">
-                View Details
-              </a>
-              <a href="#" class="px-4 py-2 text-sm font-medium text-white bg-violet-600 rounded-lg hover:bg-violet-700 transition duration-200">
-                Manage
-              </a>
+
+            <!-- Recent Bookings Section -->
+            <div class="bg-purple-50 rounded-2xl shadow-sm overflow-hidden border border-purple-200">
+                <div class="p-5 border-b border-purple-200">
+                    <h2 class="text-xl font-semibold text-purple-900">Recent Bookings</h2>
+                </div>
+                <div class="divide-y divide-purple-200">
+                    <!-- Booking 1 -->
+                    <div class="p-5 hover:bg-purple-100 transition">
+                        <div class="flex flex-col gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-purple-200 p-2 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="font-medium text-purple-900 truncate">Elite Football Arena</h3>
+                                    <p class="text-sm text-purple-700 mt-1">Tomorrow • 4:00 PM - 6:00 PM</p>
+                                    <p class="text-xs text-purple-600 mt-1">Turf #2 • 7-a-side</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="flex-1 text-center px-3 py-2 text-sm font-medium text-purple-800 bg-purple-200 rounded-lg hover:bg-purple-300 transition">
+                                    Details
+                                </a>
+                                <a href="#" class="flex-1 text-center px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg hover:from-purple-700 hover:to-purple-800 transition shadow-sm hover:shadow-md">
+                                    Manage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Booking 2 -->
+                    <div class="p-5 hover:bg-purple-100 transition">
+                        <div class="flex flex-col gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-purple-200 p-2 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="font-medium text-purple-900 truncate">Green Valley Sports</h3>
+                                    <p class="text-sm text-purple-700 mt-1">Saturday • 10:00 AM - 12:00 PM</p>
+                                    <p class="text-xs text-purple-600 mt-1">Turf #1 • 5-a-side</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="flex-1 text-center px-3 py-2 text-sm font-medium text-purple-800 bg-purple-200 rounded-lg hover:bg-purple-300 transition">
+                                    Details
+                                </a>
+                                <a href="#" class="flex-1 text-center px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg hover:from-purple-700 hover:to-purple-800 transition shadow-sm hover:shadow-md">
+                                    Manage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-purple-100 text-center">
+                    <a href="#" class="text-sm font-medium text-purple-700 hover:text-purple-900 transition inline-flex items-center">
+                        View all bookings
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-      <div class="p-4 bg-violet-50 text-center">
-        <a href="#" class="text-sm font-medium text-violet-600 hover:text-violet-800 transition duration-150 inline-flex items-center">
-          View all bookings
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </a>
-      </div>
     </div>
-  </div>
 </div>
 {% endblock %}

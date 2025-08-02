@@ -121,5 +121,8 @@ def toggle_favourite(request, turf_id):
 
     if not created:
         favourite.delete()
-    
+
+    next_url = request.GET.get('next')
+    if next_url:
+        return redirect(next_url)
     return redirect('find_turf')

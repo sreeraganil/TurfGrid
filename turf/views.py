@@ -159,3 +159,6 @@ def add_turf(request):
     }
     return render(request, 'add_turf.html', context)
 
+
+def favourites(request):
+    return render(request, 'manage_favourites.html')
