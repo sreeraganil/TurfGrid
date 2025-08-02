@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'core',
     'turf',
     'owner',
+    'custom_admin',
 ]
 
 MIDDLEWARE = [

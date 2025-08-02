@@ -48,7 +48,7 @@ class Turf(models.Model):
     surface_type = models.CharField(max_length=20, choices=SURFACE_CHOICES)
     capacity = models.PositiveIntegerField()
     price_per_hour = models.DecimalField(max_digits=8, decimal_places=2)
-    rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], default=0)
+    rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=0)
     amenities = models.ManyToManyField(Amenity, blank=True)
     minimum_booking_duration = models.IntegerField(default=1)
     opening = models.TimeField()

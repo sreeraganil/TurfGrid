@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('superadmin/', include('custom_admin.urls')),
     path('', include('core.urls')),
     path('account/', include('accounts.urls')),
     path('turf/', include('turf.urls')),
@@ -12,5 +13,5 @@ urlpatterns = [
 ]
 
 
-if settings.DEBUG and not settings.USE_CLOUDINARY:
+if not settings.USE_CLOUDINARY:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

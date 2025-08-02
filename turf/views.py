@@ -92,11 +92,19 @@ def turf_detail(request, slug):
     og_image_url = None
     if turf.image:
         og_image_url = request.build_absolute_uri(turf.image.url)
+
+    if not turf.is_verified:
+        messages.error(request, "Please note: This turf is yet to be verified by the admin. Book at your own risk.")
+
+    favourited_turf_ids = []
+    if request.user.is_authenticated:
+        favourited_turf_ids = [fav.turf.id for fav in request.user.favourites.all()]
         
     context = {
         'turf': turf,
         'absolute_url': absolute_url,
         'og_image_url': og_image_url,
+        'favourited_turf_ids': favourited_turf_ids
     }
     return render(request, 'turf_detail.html', context)
 

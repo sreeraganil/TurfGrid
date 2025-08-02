@@ -9,20 +9,25 @@ from turf.models import Favourite, Turf
 
 @never_cache
 def login_view(request):
-    if request.user.is_authenticated :
+    if request.user.is_authenticated:
         return redirect('dashboard')
-    
+
     if request.method == "POST":
         email = request.POST['email']
         password = request.POST['password']
         user = authenticate(request, email=email, password=password)
+        
         if user:
+            if getattr(user, 'is_blocked', False):
+                messages.error(request, 'Your account has been blocked by the admin')
+                return render(request, 'login.html')
             login(request, user)
-            messages.success(request, "Login successfull")
+            messages.success(request, "Login successful")
             return redirect('dashboard')
         else:
             messages.error(request, 'Invalid credentials')
             return render(request, 'login.html')
+
     return render(request, 'login.html')
 
 
@@ -113,7 +118,6 @@ def update_profile(request):
 def toggle_favourite(request, turf_id):
     turf = get_object_or_404(Turf, id=turf_id)
     favourite, created = Favourite.objects.get_or_create(user=request.user, turf=turf)
-    print(f"-----------------------------{turf_id}---------------------")
 
     if not created:
         favourite.delete()
