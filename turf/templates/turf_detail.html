@@ -5,6 +5,12 @@
 {% block extra_head %}
   <meta property="og:title" content="{{ turf.name }}" />
   <meta property="og:description" content="{{ turf.description|truncatewords:25 }}" />
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   {% if turf.image %}
   <meta property="og:image" content="{{ turf.image.url }}" />
   {% endif %}
@@ -303,7 +309,9 @@
               Location
             </h2>
             <div class="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
-              <!-- Map placeholder - would be replaced with actual map integration -->
+              {% if turf.latitude and turf.longitude %}
+              <div id="map" class="w-full h-64 rounded-lg"></div>
+              {% else %}
               <div class="text-center p-4">
                 <svg class="h-12 w-12 text-gray-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -311,11 +319,12 @@
                 </svg>
                 <p class="mt-2 text-gray-500">Map of {{ turf.location }}</p>
               </div>
+              {% endif %}
             </div>
             <div class="mt-4">
               <p class="text-gray-600">{{ turf.address }}</p>
             </div>
-            <a href="https://www.google.com/maps/search/?api=1&query={{ turf.address|urlencode }}" target="_blank" class="mt-4 w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+            <a href="https://www.google.com/maps/search/?api=1&query={{ turf.latitude }},{{ turf.longitude }}" target="_blank" class="mt-4 w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
               <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
               </svg>
@@ -333,6 +342,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const shareButton = document.getElementById('share-button');
     const turfName = "{{ turf.name|escapejs }}";
     const pageUrl = window.location.href;
+
+    // Map starts
+    const map = L.map("map").setView([{{ turf.latitude }}, {{ turf.longitude }}], 15);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    L.marker([{{ turf.latitude }}, {{ turf.longitude }}]).addTo(map)
+      .bindPopup("{{ turf.name|escapejs }}")
+      .openPopup();
+    
+    // Map ends
+
+
 
     if (shareButton) {
         const shareData = {

@@ -8,11 +8,13 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 from django.utils import timezone
 from decimal import Decimal, InvalidOperation
+from haversine import haversine, Unit
 
 @never_cache
 def find_turf(request):
-    turfs = Turf.objects.filter(is_active = True, is_verified = True)
+    turfs = Turf.objects.filter(is_active=True, is_verified=True)
 
+    # Filters
     location_query = request.GET.get('location')
     date_query = request.GET.get('date')
     sport_types = request.GET.getlist('sport_type')
@@ -20,6 +22,18 @@ def find_turf(request):
     max_price = request.GET.get('max_price')
     amenity_ids = request.GET.getlist('amenities')
     sort_by = request.GET.get('sort_by')
+
+    # New: User Location
+    user_lat = request.GET.get('user_lat')
+    user_lng = request.GET.get('user_lng')
+    user_location = None
+
+    if user_lat and user_lng:
+        try:
+            user_location = (float(user_lat), float(user_lng))
+        except ValueError:
+            user_location = None
+
 
     if location_query:
         turfs = turfs.filter(
@@ -47,15 +61,24 @@ def find_turf(request):
             turfs = turfs.filter(price_per_hour__gte=float(min_price))
         except (ValueError, TypeError):
             pass
+
     if max_price:
         try:
             turfs = turfs.filter(price_per_hour__lte=float(max_price))
         except (ValueError, TypeError):
             pass
 
-    
     if amenity_ids:
         turfs = turfs.filter(amenities__in=amenity_ids).distinct()
+
+    # Distance calculation and sorting
+    turf_distance_map = {}
+    if user_location:
+        for turf in turfs:
+            if turf.latitude and turf.longitude:
+                turf_location = (float(turf.latitude), float(turf.longitude))
+                distance = haversine(user_location, turf_location, unit=Unit.KILOMETERS)
+                turf_distance_map[turf.id] = round(distance, 2)
 
     if sort_by == 'price_asc':
         turfs = turfs.order_by('price_per_hour')
@@ -63,21 +86,26 @@ def find_turf(request):
         turfs = turfs.order_by('-price_per_hour')
     elif sort_by == 'rating':
         turfs = turfs.order_by('-rating')
+    elif sort_by == 'distance' and user_location:
+        # Sort by distance manually
+        turfs = sorted(turfs, key=lambda t: turf_distance_map.get(t.id, float('inf')))
     else:
         turfs = turfs.order_by('-created_at')
 
-
+    # For UI
     selected_sports = request.GET.getlist('sport_type')
     selected_amenities = request.GET.getlist('amenities')
-
     favourited_turf_ids = []
     if request.user.is_authenticated:
         favourited_turf_ids = [fav.turf.id for fav in request.user.favourites.all()]
 
+    # Add distances for rendering
+    for turf in turfs:
+        turf.distance = turf_distance_map.get(turf.id)
 
     context = {
         'turfs': turfs,
-        'count': turfs.count(),
+        'count': len(turfs),
         'amenities': Amenity.objects.all(),
         'sport_choices': Turf.SPORT_CHOICES,
         'selected_sports': selected_sports,
@@ -135,6 +163,8 @@ def add_turf(request):
         status = request.POST.get('status')
         image = request.FILES.get('image')
         amenities = request.POST.getlist('amenities')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
 
         turf = Turf.objects.create(
             owner=request.user,
@@ -152,7 +182,9 @@ def add_turf(request):
             opening=opening,
             closing=closing,
             status=status,
-            image=image
+            image=image,
+            latitude=latitude,
+            longitude=longitude
         )
         turf.amenities.set(amenities)
 

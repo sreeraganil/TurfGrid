@@ -75,6 +75,8 @@
                     required>
               {% for hour in available_hours %}
                 <option value="{{ hour|time:'H:i' }}">{{ hour|time:"H:i" }}</option>
+                {% empty %}
+                <option value="">Not Available</option>
               {% endfor %}
             </select>
           </div>

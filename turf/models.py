@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
 from accounts.models import User
 from django.utils import timezone
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 class Amenity(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -60,6 +60,8 @@ class Turf(models.Model):
     image = models.ImageField(upload_to='turfs/images/', null=True, blank=True) 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -82,7 +84,11 @@ class Turf(models.Model):
         for booking in existing_bookings:
             start = datetime.combine(date, booking.start_time)
             end = datetime.combine(date, booking.end_time)
-            while start < end:
+
+            if end.time() == time(0, 0):  # Handle midnight edge case
+                end += timedelta(days=1)
+
+            while start + timedelta(minutes=interval) <= end:
                 blocked_times.append(start.time())
                 start += timedelta(minutes=interval)
 

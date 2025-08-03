@@ -9,6 +9,9 @@
 
 {% block content %}
 <form method="GET" action="{% url 'find_turf' %}">
+  <input type="hidden" name="user_lat" id="user_lat" />
+  <input type="hidden" name="user_lng" id="user_lng" />
+
   <div class="min-h-screen bg-gray-50">
     <div class="bg-gradient-to-r from-purple-700 to-purple-600 py-12 px-4 sm:px-6 lg:px-8 text-white">
       <div class="max-w-7xl mx-auto">
@@ -161,6 +164,7 @@
                   <h3 class="text-lg font-bold text-gray-900">
                     {{ turf.name }}
                   </h3>
+                  {% if turf.distance %}
                   <p class="text-sm text-gray-500 mt-1">
                     <svg
                       class="h-4 w-4 inline-block mr-1"
@@ -180,9 +184,9 @@
                         stroke-width="2"
                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                       />
-                    </svg>
-                    2.5 km away
+                    </svg>In {{ turf.distance }} km radius
                   </p>
+                  {% endif %}
                 </div>
                 <div class="text-right">
                   <span class="text-2xl font-bold text-purple-600"
@@ -226,4 +230,42 @@
     </div>
   </div>
 </form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        sessionStorage.setItem("user_lat", position.coords.latitude);
+        sessionStorage.setItem("user_lng", position.coords.longitude);
+      },
+      function (error) {
+        console.warn("Geolocation error:", error.message);
+      }
+    );
+  } else {
+    console.warn("Geolocation not supported.");
+  }
+
+  const lat = sessionStorage.getItem('user_lat') || null;
+  const long = sessionStorage.getItem('user_lng') || null;
+
+  // Populate hidden fields or other elements
+  document.getElementById("user_lat").value = lat;
+  document.getElementById("user_lng").value = long;
+
+  const url = new URL(window.location.href);
+  const hasLatParam = url.searchParams.has("user_lat");
+  const hasLngParam = url.searchParams.has("user_lng");
+
+  // Redirect only if not already in the URL
+  if (lat && long && !(hasLatParam && hasLngParam)) {
+    url.searchParams.set("user_lat", lat);
+    url.searchParams.set("user_lng", long);
+    window.location.href = url.toString();
+  }
+});
+
+</script>
+
 {% endblock %}
