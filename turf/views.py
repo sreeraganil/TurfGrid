@@ -1,9 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Turf, Amenity, TurfBooking
 from django.db.models import Q
 from datetime import datetime
 from django.contrib import messages
 from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required
+from datetime import datetime, timedelta
+from django.utils import timezone
+from decimal import Decimal, InvalidOperation
 
 @never_cache
 def find_turf(request):
@@ -85,13 +89,13 @@ def find_turf(request):
     return render(request, 'find_turf.html', context)
 
 
+
+
 def turf_detail(request, slug):
-    turf = Turf.objects.get(slug = slug)
+    turf = get_object_or_404(Turf, slug=slug)
     absolute_url = request.build_absolute_uri()
 
-    og_image_url = None
-    if turf.image:
-        og_image_url = request.build_absolute_uri(turf.image.url)
+    og_image_url = request.build_absolute_uri(turf.image.url) if turf.image else None
 
     if not turf.is_verified:
         messages.error(request, "Please note: This turf is yet to be verified by the admin. Book at your own risk.")
@@ -99,12 +103,14 @@ def turf_detail(request, slug):
     favourited_turf_ids = []
     if request.user.is_authenticated:
         favourited_turf_ids = [fav.turf.id for fav in request.user.favourites.all()]
-        
+
+
+
     context = {
         'turf': turf,
         'absolute_url': absolute_url,
         'og_image_url': og_image_url,
-        'favourited_turf_ids': favourited_turf_ids
+        'favourited_turf_ids': favourited_turf_ids,
     }
     return render(request, 'turf_detail.html', context)
 
@@ -160,5 +166,97 @@ def add_turf(request):
     return render(request, 'add_turf.html', context)
 
 
+
+
+
+
 def favourites(request):
     return render(request, 'manage_favourites.html')
+
+
+
+
+
+@login_required
+def book_turf(request, turf_id):
+    turf = get_object_or_404(Turf, id=turf_id)
+    today = timezone.localdate()
+
+    # Handle date selection from query parameters
+    selected_date_str = request.GET.get('booking_date')
+    if selected_date_str:
+        try:
+            booking_date = datetime.strptime(selected_date_str, '%Y-%m-%d').date()
+        except ValueError:
+            booking_date = today
+    else:
+        booking_date = today
+
+    # Calculate available hours
+    selected_duration = float(request.GET.get('duration', turf.minimum_booking_duration))
+    if booking_date:
+        available_hours = turf.get_available_hours(booking_date, selected_duration)
+    
+    # Calculate max possible duration
+    max_duration = turf.get_max_booking_duration()
+    duration_options = []
+    current = 1
+    while current <= max_duration:
+        duration_options.append(current)
+        current += 1
+
+
+    if request.method == 'POST':
+        # Handle form submission
+        booking_date = request.POST.get('booking_date')
+        start_time = request.POST.get('start_time')
+        try:
+            duration = Decimal(str(request.POST.get('duration')))
+        except InvalidOperation:
+            messages.error(request, "Invalid duration.")
+            return redirect('book_turf', turf_id=turf.id)
+        notes = request.POST.get('notes', '')
+
+        try:
+            # Create booking
+            start_datetime = datetime.strptime(f"{booking_date} {start_time}", "%Y-%m-%d %H:%M")
+            end_datetime = start_datetime + timedelta(hours=float(duration))
+
+
+            service_fee = Decimal('80.00')
+            
+            booking = TurfBooking(
+                turf=turf,
+                user=request.user,
+                booking_date=booking_date,
+                start_time=start_time,
+                end_time=end_datetime.time(),
+                total_amount=(turf.price_per_hour * duration) + service_fee, 
+                status = 'confirmed',
+                notes=notes
+            )
+            booking.save()
+
+            messages.success(request, 'Your booking has been confirmed!')
+            return redirect('booking_confirmation', booking_id=booking.id)
+        
+        except Exception as e:
+            messages.error(request, f'Error creating booking: {str(e)}')
+            return redirect('book_turf', turf_id=turf.id)
+
+    context = {
+        'turf': turf,
+        'today': today,
+        'available_hours': available_hours,
+        'duration_options': duration_options,
+        'selected_date': booking_date,
+        'selected_duration': selected_duration,
+        'values':request.GET,
+    }
+    return render(request, 'book_turf.html', context)
+
+
+@login_required
+def booking_confirmation(request, booking_id):
+    booking = get_object_or_404(TurfBooking, id=booking_id, user=request.user)
+    return render(request, 'booking_confirmation.html', {'booking': booking})
