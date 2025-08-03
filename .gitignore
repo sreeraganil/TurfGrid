@@ -3,7 +3,7 @@
 /staticfiles/
 __pycache__/
 /.env
-# db.sqlite3
+db.sqlite3
 *.log
 desktop.ini
 
@@ -16,3 +16,7 @@ ENV/
 
 
 media
+
+# Ignore Django migration files
+*/migrations/*.py
+!*/migrations/__init__.py
