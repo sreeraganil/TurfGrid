@@ -143,7 +143,7 @@ class TurfBooking(models.Model):
     ]
 
     turf = models.ForeignKey(Turf, on_delete=models.CASCADE, related_name='bookings')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
     booking_date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
@@ -155,7 +155,7 @@ class TurfBooking(models.Model):
 
 class TurfReview(models.Model):
     turf = models.ForeignKey(Turf, on_delete=models.CASCADE, related_name='reviews')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

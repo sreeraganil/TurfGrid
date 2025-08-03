@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from accounts.models import User
 from django.contrib.sessions.models import Session
 from turf.models import Turf, TurfBooking, TurfReview
-from django.db.models import Sum, Count
+from django.db.models import Sum
 from datetime import date
 
 @login_required

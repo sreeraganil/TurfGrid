@@ -46,11 +46,18 @@
             <!-- Quick Actions -->
             <div class="flex flex-col sm:flex-row md:flex-col gap-3">
                 {% if request.user.role == 'owner' %}
-                <a href="{% url 'owner_dashboard' %}" class="px-4 py-3 bg-purple-100 border border-purple-300 text-purple-800 font-medium rounded-xl hover:bg-purple-200 transition flex items-center justify-center gap-2 shadow-sm hover:shadow-md flex-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                    </svg>
-                    Owner Panel
+                    <a href="{% url 'owner_dashboard' %}" class="px-4 py-3 bg-purple-100 border border-purple-300 text-purple-800 font-medium rounded-xl hover:bg-purple-200 transition flex items-center justify-center gap-2 shadow-sm hover:shadow-md flex-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                        </svg>
+                        Owner Panel
+                    </a>
+                {% elif request.user.role == 'admin'  %}
+                    <a href="{% url 'admin_dashboard' %}" class="px-4 py-3 bg-purple-100 border border-purple-300 text-purple-800 font-medium rounded-xl hover:bg-purple-200 transition flex items-center justify-center gap-2 shadow-sm hover:shadow-md flex-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                        </svg>
+                    Admin Panel
                 </a>
                 {% endif %}
                 <div x-data="{ open: false }" class="relative flex-1">
@@ -86,7 +93,7 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-sm font-semibold text-purple-700 uppercase tracking-wider">Upcoming Bookings</p>
-                    <h3 class="text-5xl text-center font-extrabold text-purple-700 mt-3 mb-4">3</h3>
+                    <h3 class="text-5xl text-center font-extrabold text-purple-700 mt-3 mb-4">{{ upcoming_bookings|length }}</h3>
                 </div>
                 <div class="p-3 bg-white/50 backdrop-blur-sm rounded-xl shadow-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -184,7 +191,7 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 p-2">
                     {% for turf in request.user.favourites.all|slice:":2" %}
-                    <div class="p-4 border-2 rounded-lg border-purple-200 hover:bg-purple-100 transition">
+                    <div class="relative p-4 border-2 rounded-lg border-purple-200 hover:bg-purple-100 transition">
                         <div class="h-40 bg-purple-200 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
                             {% if turf.turf.image %}
                             <img class="w-full h-full object-cover" src="{{turf.turf.image.url}}" alt='{{turf.turf.name}}' />
@@ -206,7 +213,13 @@
                                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                                 </svg>
                             </a>
-                            <button class="text-purple-700 hover:text-purple-900 p-1">
+                            <a href="{% url 'book_turf' turf.turf.id %}" class="text-sm font-medium text-white hover:text-purple-900  bg-purple-500 py-1 px-2 rounded-md transition flex items-center gap-2">
+                                Book
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </a>
+                            <button class="absolute top-5 right-5 text-red-700 hover:text-red-900 p-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
                                 </svg>
@@ -228,6 +241,7 @@
                 </div>
                 <div class="divide-y divide-purple-200">
                     <!-- Booking 1 -->
+                    {% for booking in request.user.bookings.all|slice:":2" %}
                     <div class="p-5 hover:bg-purple-100 transition">
                         <div class="flex flex-col gap-3">
                             <div class="flex items-center gap-3">
@@ -237,9 +251,9 @@
                                     </svg>
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <h3 class="font-medium text-purple-900 truncate">Elite Football Arena</h3>
-                                    <p class="text-sm text-purple-700 mt-1">Tomorrow • 4:00 PM - 6:00 PM</p>
-                                    <p class="text-xs text-purple-600 mt-1">Turf #2 • 7-a-side</p>
+                                    <h3 class="font-medium text-purple-900 truncate">{{ booking.turf.name }}</h3>
+                                    <p class="text-sm text-purple-700 mt-1">{{booking.booking_date}} • {{booking.start_time}} - {{booking.end_time}}</p>
+                                    <p class="text-sm text-purple-600 font-bold mt-1"><span class="font-semibold">Amount: </span>₹{{booking.total_amount}}</p>
                                 </div>
                             </div>
                             <div class="flex gap-2">
@@ -252,32 +266,8 @@
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                     
-                    <!-- Booking 2 -->
-                    <div class="p-5 hover:bg-purple-100 transition">
-                        <div class="flex flex-col gap-3">
-                            <div class="flex items-center gap-3">
-                                <div class="bg-purple-200 p-2 rounded-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="font-medium text-purple-900 truncate">Green Valley Sports</h3>
-                                    <p class="text-sm text-purple-700 mt-1">Saturday • 10:00 AM - 12:00 PM</p>
-                                    <p class="text-xs text-purple-600 mt-1">Turf #1 • 5-a-side</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-2">
-                                <a href="#" class="flex-1 text-center px-3 py-2 text-sm font-medium text-purple-800 bg-purple-200 rounded-lg hover:bg-purple-300 transition">
-                                    Details
-                                </a>
-                                <a href="#" class="flex-1 text-center px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg hover:from-purple-700 hover:to-purple-800 transition shadow-sm hover:shadow-md">
-                                    Manage
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="p-4 bg-purple-100 text-center">
                     <a href="#" class="text-sm font-medium text-purple-700 hover:text-purple-900 transition inline-flex items-center">
