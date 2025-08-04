@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+  <!-- Header with back button and logo -->
+  <header class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex items-center">
+      <a href="{% url 'turf_detail' slug=turf.slug %}" class="mr-4">
+        <svg class="h-6 w-6 text-gray-500 hover:text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </a>
+      <div class="flex items-center">
+        <img src="{% static 'images/logo.png' %}" alt="TurfGrid Logo" class="h-8 w-auto mr-2">
+        <span class="text-xl font-bold text-purple-600">TurfGrid</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-2xl mx-auto mt-8 bg-white p-8 rounded-xl shadow-md">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+      <svg class="h-8 w-8 text-purple-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+      </svg>
+      Write a Review for {{ turf.name }}
+    </h2>
+
+    <form method="POST" class="space-y-6">
+      {% csrf_token %}
+
+      <div class="bg-purple-50 p-4 rounded-lg">
+        <label for="rating" class="block text-sm font-medium text-purple-800">Rating</label>
+        <div class="flex flex-row-reverse justify-end space-x-reverse space-x-1 m-2">
+            {% for i in "54321" %}
+                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" class="peer hidden" {% if review.rating == i|add:"0" %}checked{% endif %} />
+                <label for="star{{ i }}" class="text-3xl cursor-pointer text-gray-300 peer-checked:text-yellow-400 peer-hover:text-yellow-300 transition duration-200">
+                ★
+                </label>
+            {% endfor %}
+        </div>
+      </div>
+
+      <div class="bg-purple-50 p-4 rounded-lg">
+        <label for="comment" class="block text-sm font-medium text-purple-800">Your Review</label>
+        <textarea name="comment" id="comment" rows="5" required 
+                  class="mt-2 block w-full px-4 py-3 border border-purple-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white"
+                  placeholder="Share your experience..."></textarea>
+      </div>
+
+      <div class="pt-4 flex justify-end space-x-4">
+        <a href="{% url 'turf_detail' slug=turf.slug %}" 
+           class="px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 shadow-sm">
+          Cancel
+        </a>
+        <button type="submit" 
+                class="px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+          Submit Review
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'turf',
     'owner',
     'custom_admin',
+    'review',
 ]
 
 MIDDLEWARE = [

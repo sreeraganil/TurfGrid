@@ -114,7 +114,11 @@
                 <div class="flex items-center">
                   {% if user.profile_pic %}
                   <div class="flex-shrink-0 h-10 w-10">
-                    <img class="h-10 w-10 rounded-full" src="{{ user.profile_pic.url }}" alt="">
+                    <img class="h-10 w-10 rounded-full object-cover" src="{{ user.profile_pic.url }}" alt="">
+                  </div>
+                  {% else %}
+                  <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
+                    {{ user.fname|first|upper }}{{ user.lname|first|upper }}
                   </div>
                   {% endif %}
                   <div class="ml-4">
@@ -329,8 +333,8 @@
               <p class="mt-1 text-xs text-gray-500">For: {{ review.turf.name }}</p>
             </div>
           </div>
-          <div class="mt-4 flex justify-end space-x-3">
-            <button class="text-sm text-red-600 hover:text-red-900">Delete</button>
+          <div class="mt-4 flex justify-end space-x-3 cursor-pointer">
+            <a href="{% url 'delete_review' review.id %}?next={% url 'admin_dashboard' %}" class="text-sm text-red-600 hover:text-red-900">Delete</a>
           </div>
         </div>
         {% empty %}

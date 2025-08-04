@@ -132,6 +132,7 @@ def turf_detail(request, slug):
     if request.user.is_authenticated:
         favourited_turf_ids = [fav.turf.id for fav in request.user.favourites.all()]
 
+    has_reviewed = turf.reviews.filter(user=request.user).exists()
 
 
     context = {
@@ -139,6 +140,7 @@ def turf_detail(request, slug):
         'absolute_url': absolute_url,
         'og_image_url': og_image_url,
         'favourited_turf_ids': favourited_turf_ids,
+        "has_reviewed": has_reviewed,
     }
     return render(request, 'turf_detail.html', context)
 
