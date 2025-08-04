@@ -10,7 +10,6 @@ def add_review(request, turf_id):
     turf = get_object_or_404(Turf, id=turf_id)
     
     if TurfReview.objects.filter(turf=turf, user=request.user).exists():
-        messages.error(request, "You have already reviewed this turf.")
         return redirect("turf_detail", slug=turf.slug)
 
     if request.method == "POST":

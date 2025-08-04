@@ -89,7 +89,7 @@
             <h2 class="text-xl font-bold text-gray-900">{{ count }} Turfs Found</h2>
             <div class="flex items-center">
               <span class="text-sm text-gray-700 mr-2">Sort by:</span>
-              <select name="sort_by" onchange="this.form.submit()" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 rounded-md">
+              <select name="sort_by" onchange="this.form.submit()" class="block w-full pl-3 pr-10 py-2 text-base border border-purple-300 rounded-md focus:border-purple-600 focus:border-2">
                 <option value="default" {% if not values.sort_by or values.sort_by == 'default' %}selected{% endif %}>Recommended</option>
                 <option value="price_asc" {% if values.sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
                 <option value="price_desc" {% if values.sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
@@ -147,12 +147,21 @@
                   <div class="pr-2">
                     <h3 class="text-lg font-bold text-gray-900 truncate">{{ turf.name }}</h3>
                     {% if turf.distance %}
-                    <p class="text-sm text-gray-500 mt-1 flex items-center">
+                    <p class="text-sm text-gray-500 mt-1 flex items-center gap-1">
                       <svg class="h-4 w-4 mr-1 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                       </svg>
-                      {{ turf.distance }} km away <br/> (direct distance)
+                      ~{{ turf.distance }} km
+                      <abbr class="cursor-pointer" title="This is the shortest distance in a straight line, not accounting for roads or traffic.">
+                        <svg width="20" height="20" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                          <!-- Outer circle -->
+                          <circle cx="60" cy="60" r="50" fill="#E3F2FD" stroke="#2196F3" stroke-width="4"/>
+                          
+                          <!-- Centered "i" text -->
+                          <text x="60" y="68" font-family="Arial, sans-serif" font-size="60" text-anchor="middle" fill="#2196F3" font-weight="bold" dominant-baseline="middle">i</text>
+                        </svg>
+                      <abbr>
                     </p>
                     {% endif %}
                   </div>
@@ -168,7 +177,7 @@
                     {{ turf.get_sport_type_display }}
                   </span>
                   {% for amenity in turf.amenities.all|slice:":3" %}
-                  <span class="inline-flex amenity-{{amenity|slugify}} items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                  <span class="inline-flex amenity-{{amenity|slugify}} items-center px-3 py-1 rounded-full text-xs font-medium">
                     {{ amenity.name }}
                   </span>
                   {% endfor %}

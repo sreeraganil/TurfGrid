@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Turf, TurfSchedule, TurfBooking, TurfReview, Amenity, Favourite
+from .models import Turf, TurfBooking, TurfReview, Amenity, Favourite
 
 
 @admin.register(Amenity)
@@ -13,13 +13,6 @@ class TurfAdmin(admin.ModelAdmin):
     search_fields = ('name', 'address', 'city')
     prepopulated_fields = {'slug': ('name',)}
     autocomplete_fields = ['owner']
-
-
-@admin.register(TurfSchedule)
-class TurfScheduleAdmin(admin.ModelAdmin):
-    list_display = ('turf', 'day', 'start_time', 'end_time', 'price', 'is_peak', 'is_available')
-    list_filter = ('day', 'is_peak', 'is_available')
-    search_fields = ('turf__name',)
 
 
 @admin.register(TurfBooking)

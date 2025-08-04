@@ -2,7 +2,6 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
 from accounts.models import User
-from django.utils import timezone
 from datetime import datetime, timedelta, time
 
 class Amenity(models.Model):
@@ -49,7 +48,6 @@ class Turf(models.Model):
     surface_type = models.CharField(max_length=20, choices=SURFACE_CHOICES)
     capacity = models.PositiveIntegerField()
     price_per_hour = models.DecimalField(max_digits=8, decimal_places=2)
-    rating = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=0)
     amenities = models.ManyToManyField(Amenity, blank=True)
     minimum_booking_duration = models.IntegerField(default=1)
     opening = models.TimeField()
@@ -62,6 +60,10 @@ class Turf(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+
+    @property
+    def rating(self):
+        return self.reviews.aggregate(avg=models.Avg('rating'))['avg'] or 0
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -118,20 +120,6 @@ class Turf(models.Model):
                       datetime.combine(today, self.opening)).seconds // 3600
         return min(total_hours, 4)
 
-
-class TurfSchedule(models.Model):
-    turf = models.ForeignKey(Turf, on_delete=models.CASCADE, related_name='schedules')
-    day = models.PositiveIntegerField(choices=[(i, day) for i, day in enumerate(
-        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    )])
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    price = models.DecimalField(max_digits=8, decimal_places=2)
-    is_peak = models.BooleanField(default=False)
-    is_available = models.BooleanField(default=True)
-
-    class Meta:
-        ordering = ['day', 'start_time']
 
 
 class TurfBooking(models.Model):

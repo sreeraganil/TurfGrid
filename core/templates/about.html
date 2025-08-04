@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Nav -->
+<header class="bg-gradient-to-r from-purple-700 to-purple-600 text-white shadow-lg">
+    <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <a href="{% url 'dashboard' %}" class="text-2xl font-bold tracking-tight flex items-center gap-2">
+        <img src="{% static 'images/logo_white.png' %}" height="35" width="35" alt="TurfGrid Logo" />
+        TurfGrid
+        </a>
+    </nav>
+</header>  
+
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-purple-700 to-purple-600 text-white py-20 md:py-28">
+  <div class="container mx-auto px-4 text-center">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6">
+      Our Story
+    </h1>
+    <p class="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">
+      Revolutionizing how sports enthusiasts find and book quality turfs across the country
+    </p>
+  </div>
+</section>
+
+<!-- About Section -->
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col md:flex-row items-center gap-12">
+      <div class="md:w-1/2">
+        <div class="bg-purple-100 rounded-2xl overflow-hidden shadow-xl">
+          <img src="{% static 'images/team.png' %}" alt="TurfGrid team" class="w-full h-auto object-cover">
+        </div>
+      </div>
+      <div class="md:w-1/2">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+          Who We Are
+        </h2>
+        <p class="text-lg text-gray-600 mb-6">
+          Founded in 2025, TurfGrid began with a simple mission: to make finding and booking sports turfs effortless. 
+          What started as a small team of sports enthusiasts has grown into a nationwide platform connecting 
+          athletes with premium playing facilities.
+        </p>
+        <div class="space-y-4">
+          <div class="flex items-start">
+            <div class="bg-purple-100 p-3 rounded-full mr-4">
+              <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-gray-800">Fast Growth</h3>
+              <p class="text-gray-600">From 5 turfs to 150+ in just 12 months</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="bg-purple-100 p-3 rounded-full mr-4">
+              <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-gray-800">Community</h3>
+              <p class="text-gray-600">10,000+ active players in our network</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="bg-purple-100 p-3 rounded-full mr-4">
+              <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-gray-800">Trusted</h3>
+              <p class="text-gray-600">4.9/5 average rating from our users</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission Section -->
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Our Mission</h2>
+      <p class="text-xl text-gray-600 mb-10">
+        To empower athletes and sports enthusiasts by providing seamless access to quality playing facilities, 
+        while helping turf owners maximize their field utilization through our innovative platform.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-xl shadow-md">
+          <div class="bg-purple-100 w-14 h-14 rounded-full flex items-center justify-center mb-4 mx-auto">
+            <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Accessibility</h3>
+          <p class="text-gray-600">Making sports facilities available to everyone, everywhere</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md">
+          <div class="bg-purple-100 w-14 h-14 rounded-full flex items-center justify-center mb-4 mx-auto">
+            <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Innovation</h3>
+          <p class="text-gray-600">Constantly improving our technology to serve you better</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md">
+          <div class="bg-purple-100 w-14 h-14 rounded-full flex items-center justify-center mb-4 mx-auto">
+            <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Community</h3>
+          <p class="text-gray-600">Building connections between players and facilities</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Meet The Team</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        The passionate people behind TurfGrid who work tirelessly to improve your playing experience
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+        <img src="{% static 'images/photo1.png' %}" alt="Team member" class="w-full h-64 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-800">Alex Johnson</h3>
+          <p class="text-purple-600 font-medium mb-2">Founder & CEO</p>
+          <p class="text-gray-600">Former professional footballer with a vision for accessible sports</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+        <img src="{% static 'images/photo2.png' %}" alt="Team member" class="w-full h-64 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-800">Sarah Chen</h3>
+          <p class="text-purple-600 font-medium mb-2">CTO</p>
+          <p class="text-gray-600">Tech wizard building the platform to serve millions</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+        <img src="{% static 'images/photo3.png' %}" alt="Team member" class="w-full h-64 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-800">Michael Rodriguez</h3>
+          <p class="text-purple-600 font-medium mb-2">Head of Operations</p>
+          <p class="text-gray-600">Ensuring every booking is seamless and every turf is perfect</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+        <img src="{% static 'images/photo4.png' %}" alt="Team member" class="w-full h-64 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-800">Priya Patel</h3>
+          <p class="text-purple-600 font-medium mb-2">Customer Experience</p>
+          <p class="text-gray-600">Making sure every user has an exceptional experience</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 bg-purple-700 text-white">
+  <div class="container mx-auto px-4 text-center">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6">Join Our Growing Community</h2>
+      <p class="text-xl mb-8 opacity-90">
+        Whether you're a player looking for turfs or a turf owner wanting to list your facility, 
+        we'd love to have you on board.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <a href="{% url 'register' %}" class="bg-white text-purple-700 hover:bg-purple-50 font-bold py-4 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300">
+          Sign Up Now
+        </a>
+        <a href="{% url 'contact' %}" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-purple-700 font-bold py-4 px-8 rounded-full text-lg shadow-xl transform hover:scale-105 transition duration-300">
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

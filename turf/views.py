@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Turf, Amenity, TurfBooking
-from django.db.models import Q
+from django.db.models import Q, Avg
 from datetime import datetime
 from django.contrib import messages
 from django.views.decorators.cache import never_cache
@@ -74,7 +74,7 @@ def find_turf(request):
     # Distance calculation and sorting
     turf_distance_map = {}
     if user_location:
-        for turf in turfs:
+        for turf in turfs[:25]:
             if turf.latitude and turf.longitude:
                 turf_location = (float(turf.latitude), float(turf.longitude))
                 distance = haversine(user_location, turf_location, unit=Unit.KILOMETERS)
@@ -85,12 +85,14 @@ def find_turf(request):
     elif sort_by == 'price_desc':
         turfs = turfs.order_by('-price_per_hour')
     elif sort_by == 'rating':
-        turfs = turfs.order_by('-rating')
-    elif sort_by == 'distance' and user_location:
-        # Sort by distance manually
-        turfs = sorted(turfs, key=lambda t: turf_distance_map.get(t.id, float('inf')))
+        turfs = turfs = turfs.annotate(avg_rating=Avg('reviews__rating')).order_by('avg_rating')
     else:
         turfs = turfs.order_by('-created_at')
+
+    
+    if user_location:
+        # Sort by distance manually
+        turfs = sorted(turfs, key=lambda t: turf_distance_map.get(t.id, float('inf')))
 
     # For UI
     selected_sports = request.GET.getlist('sport_type')
@@ -104,7 +106,7 @@ def find_turf(request):
         turf.distance = turf_distance_map.get(turf.id)
 
     context = {
-        'turfs': turfs,
+        'turfs': turfs[:25],
         'count': len(turfs),
         'amenities': Amenity.objects.all(),
         'sport_choices': Turf.SPORT_CHOICES,
@@ -146,7 +148,7 @@ def turf_detail(request, slug):
 
 
 
-
+@login_required(login_url='login')
 def add_turf(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -203,15 +205,13 @@ def add_turf(request):
 
 
 
-
+@login_required(login_url='login')
 def favourites(request):
     return render(request, 'manage_favourites.html')
 
 
 
-
-
-@login_required
+@login_required(login_url='login')
 def book_turf(request, turf_id):
     turf = get_object_or_404(Turf, id=turf_id)
     today = timezone.localdate()
@@ -290,7 +290,7 @@ def book_turf(request, turf_id):
     return render(request, 'book_turf.html', context)
 
 
-@login_required
+@login_required(login_url='login')
 def booking_confirmation(request, booking_id):
     booking = get_object_or_404(TurfBooking, id=booking_id, user=request.user)
     return render(request, 'booking_confirmation.html', {'booking': booking})
