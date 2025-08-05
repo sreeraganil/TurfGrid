@@ -74,7 +74,7 @@ def find_turf(request):
     # Distance calculation and sorting
     turf_distance_map = {}
     if user_location:
-        for turf in turfs[:25]:
+        for turf in turfs:
             if turf.latitude and turf.longitude:
                 turf_location = (float(turf.latitude), float(turf.longitude))
                 distance = haversine(user_location, turf_location, unit=Unit.KILOMETERS)
@@ -85,14 +85,19 @@ def find_turf(request):
     elif sort_by == 'price_desc':
         turfs = turfs.order_by('-price_per_hour')
     elif sort_by == 'rating':
-        turfs = turfs = turfs.annotate(avg_rating=Avg('reviews__rating')).order_by('avg_rating')
+        turfs = list(
+            turfs.annotate(avg_rating=Avg('reviews__rating'))
+        )
+        turfs.sort(
+            key=lambda t: t.avg_rating if t.avg_rating is not None else -1,
+            reverse=True
+        )
+    elif user_location:
+        turfs = sorted(turfs, key=lambda t: turf_distance_map.get(t.id, float('inf')))
     else:
         turfs = turfs.order_by('-created_at')
 
     
-    if user_location:
-        # Sort by distance manually
-        turfs = sorted(turfs, key=lambda t: turf_distance_map.get(t.id, float('inf')))
 
     # For UI
     selected_sports = request.GET.getlist('sport_type')
@@ -106,7 +111,7 @@ def find_turf(request):
         turf.distance = turf_distance_map.get(turf.id)
 
     context = {
-        'turfs': turfs[:25],
+        'turfs': turfs,
         'count': len(turfs),
         'amenities': Amenity.objects.all(),
         'sport_choices': Turf.SPORT_CHOICES,
@@ -131,10 +136,10 @@ def turf_detail(request, slug):
         messages.error(request, "Please note: This turf is yet to be verified by the admin. Book at your own risk.")
 
     favourited_turf_ids = []
+    has_reviewed = False
     if request.user.is_authenticated:
         favourited_turf_ids = [fav.turf.id for fav in request.user.favourites.all()]
-
-    has_reviewed = turf.reviews.filter(user=request.user).exists()
+        has_reviewed = turf.reviews.filter(user=request.user).exists()
 
 
     context = {

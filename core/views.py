@@ -15,6 +15,7 @@ def landing_view(request):
     return render(request, 'landing.html')
 
 @login_required(login_url='login')
+@never_cache
 def dashboard(request):
     now = timezone.localtime(timezone.now())
     today = now.date()
