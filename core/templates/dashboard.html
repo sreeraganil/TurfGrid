@@ -241,7 +241,7 @@
                 </div>
                 <div class="divide-y divide-purple-200">
                     <!-- Booking 1 -->
-                    {% for booking in request.user.bookings.all|slice:":2" %}
+                    {% for booking in user_bookings|slice:":2" %}
                     <div class="p-5 hover:bg-purple-100 transition">
                         <div class="flex flex-col gap-3">
                             <div class="flex items-center gap-3">

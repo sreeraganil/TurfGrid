@@ -100,7 +100,7 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for turf in turfs %}
-            <div class="relative rounded-xl shadow-sm overflow-hidden hover:shadow-md transition duration-300 border border-gray-100 hover:border-purple-100">
+            <div class="relative flex flex-col rounded-xl shadow-sm overflow-hidden hover:shadow-md transition duration-300 border border-gray-100 hover:border-purple-100">
               <!-- Image Section -->
               <div class="relative h-56 overflow-hidden">
                 {% if turf.image %}
@@ -142,7 +142,7 @@
               </div>
 
               <!-- Content Section -->
-              <div class="p-5 bg-white">
+              <div class="p-5 bg-white grow flex flex-col justify-between">
                 <div class="flex justify-between items-start mb-3">
                   <div class="pr-2">
                     <h3 class="text-lg font-bold text-gray-900 truncate">{{ turf.name }}</h3>

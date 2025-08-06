@@ -46,7 +46,7 @@
         <div class="flex justify-between">
           <div>
             <p class="text-sm font-medium text-gray-500">Today's Bookings</p>
-            <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ stats.todays_bookings }}</h3>
+            <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ todays_bookings }}</h3>
           </div>
           <div class="p-3 bg-blue-100 rounded-lg">
             <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -59,8 +59,8 @@
       <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
         <div class="flex justify-between">
           <div>
-            <p class="text-sm font-medium text-gray-500">This Month's Revenue</p>
-            <h3 class="text-2xl font-bold text-gray-900 mt-1">₹{{ stats.monthly_revenue|floatformat:0 }}</h3>
+            <p class="text-sm font-medium text-gray-500">Total Revenue</p>
+            <h3 class="text-2xl font-bold text-gray-900 mt-1">₹{{ total_earnings|floatformat:0 }}</h3>
           </div>
           <div class="p-3 bg-green-100 rounded-lg">
             <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -74,7 +74,7 @@
         <div class="flex justify-between">
           <div>
             <p class="text-sm font-medium text-gray-500">Average Rating</p>
-            <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ stats.average_rating|floatformat:1 }}/5</h3>
+            <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ average_rating|floatformat:1 }}/5</h3>
           </div>
           <div class="p-3 bg-yellow-100 rounded-lg">
             <svg class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -211,7 +211,7 @@
           </div>
           <div class="p-6">
             <div class="space-y-4">
-              <a href="#" class="group flex items-center p-3 border border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors duration-200">
+              <a href="{% url 'add_turf' %}" class="group flex items-center p-3 border border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors duration-200">
                 <div class="p-2 bg-purple-100 rounded-lg mr-4 group-hover:bg-purple-200">
                   <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
@@ -223,7 +223,7 @@
                 </div>
               </a>
 
-              <a href="#" class="group flex items-center p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors duration-200">
+              <a href="{% url 'manage_bookings' %}" class="group flex items-center p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors duration-200">
                 <div class="p-2 bg-blue-100 rounded-lg mr-4 group-hover:bg-blue-200">
                   <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
@@ -235,7 +235,7 @@
                 </div>
               </a>
 
-              <a href="#" class="group flex items-center p-3 border border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors duration-200">
+              <a href="{% url 'view_payments' %}" class="group flex items-center p-3 border border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors duration-200">
                 <div class="p-2 bg-green-100 rounded-lg mr-4 group-hover:bg-green-200">
                   <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -247,7 +247,7 @@
                 </div>
               </a>
 
-              <a href="#" class="group flex items-center p-3 border border-gray-200 rounded-lg hover:border-yellow-500 hover:bg-yellow-50 transition-colors duration-200">
+              <a href="{% url 'settings' %}" class="group flex items-center p-3 border border-gray-200 rounded-lg hover:border-yellow-500 hover:bg-yellow-50 transition-colors duration-200">
                 <div class="p-2 bg-yellow-100 rounded-lg mr-4 group-hover:bg-yellow-200">
                   <svg class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -269,18 +269,24 @@
           </div>
           <div class="p-6">
             {% if recent_reviews %}
-            <div class="space-y-6">
+            <div class="space-y-4">
               {% for review in recent_reviews %}
-              <div>
+              <div class="border border-gray-200 p-1 rounded-2xl">
                 <div class="flex items-center">
                   <div class="flex-shrink-0">
-                    <div class="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">
-                      {{ review.user.username|first|upper }}
+                    {% if review.user.profile_pic %}
+                    <div class="relative h-10 w-10 rounded-full overflow-hidden bg-purple-100 flex items-center justify-center text-purple-600 font-bold">
+                      <img class="w-full h-full object-cover" src="{{review.user.profile_pic.url}}" alt="" />
                     </div>
+                    {% else %}
+                    <div class="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">
+                      {{ review.user.fname|first|upper }}{{ review.user.lname|first|upper }}
+                    </div>
+                    {% endif %}
                   </div>
                   <div class="ml-4">
                     <div class="flex items-center">
-                      <h4 class="text-sm font-medium text-gray-900">{{ review.user.username }}</h4>
+                      <h4 class="text-sm font-medium text-gray-900">{{ review.user.fname }} {{ review.user.lname }}</h4>
                       <span class="mx-2 text-gray-400">·</span>
                       <span class="text-xs text-gray-500">{{ review.created_at|timesince }} ago</span>
                     </div>

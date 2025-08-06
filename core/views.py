@@ -5,7 +5,6 @@ from django.utils import timezone
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.contrib import messages
-from django.conf import settings
 
 
 @never_cache
@@ -13,6 +12,8 @@ def landing_view(request):
     if request.user.is_authenticated :
         return redirect('dashboard')
     return render(request, 'landing.html')
+
+
 
 @login_required(login_url='login')
 @never_cache
@@ -26,11 +27,15 @@ def dashboard(request):
         Q(booking_date__gt=today) | 
         Q(booking_date=today, start_time__gte=current_time)
     )
+
+    user_bookings = request.user.bookings.all().order_by('-created_at')
+
     context = {
         'upcoming_bookings': upcoming_bookings,
         'now': now,
         'today': today,
-        'current_time': current_time
+        'current_time': current_time,
+        'user_bookings': user_bookings
     }
     return render(request, 'dashboard.html', context)
 
