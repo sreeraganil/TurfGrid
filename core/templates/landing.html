@@ -66,10 +66,10 @@
         <a href="#features" class="block py-3 px-4 rounded-lg hover:bg-purple-500 text-lg font-medium">How it Works</a>
       </li>
       <li>
-        <a href="#about" class="block py-3 px-4 rounded-lg hover:bg-purple-500 text-lg font-medium">About Us</a>
+        <a href="{% url 'about' %}" class="block py-3 px-4 rounded-lg hover:bg-purple-500 text-lg font-medium">About Us</a>
       </li>
       <li>
-        <a href="#contact" class="block py-3 px-4 rounded-lg hover:bg-purple-500 text-lg font-medium">Contact</a>
+        <a href="{% url 'contact' %}" class="block py-3 px-4 rounded-lg hover:bg-purple-500 text-lg font-medium">Contact</a>
       </li>
       {% if user.is_authenticated %}
         <li>
