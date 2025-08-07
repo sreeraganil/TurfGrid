@@ -126,3 +126,9 @@ def toggle_favourite(request, turf_id):
     if next_url:
         return redirect(next_url)
     return redirect('find_turf')
+
+
+@login_required
+@never_cache
+def bookings(request):
+    return render(request, "bookings.html")

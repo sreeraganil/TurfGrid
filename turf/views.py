@@ -233,6 +233,11 @@ def book_turf(request, turf_id):
     selected_duration = float(request.GET.get('duration', turf.minimum_booking_duration))
     if booking_date:
         available_hours = turf.get_available_hours(booking_date, selected_duration)
+
+        # Exclude past time slots for today
+        if booking_date == today:
+            now = timezone.localtime().time()
+            available_hours = [hour for hour in available_hours if hour > now]
     
     # Calculate max possible duration
     max_duration = turf.get_max_booking_duration()

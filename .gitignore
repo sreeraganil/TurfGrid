@@ -20,3 +20,10 @@ media
 # Ignore Django migration files
 */migrations/*.py
 !*/migrations/__init__.py
+
+
+package-lock.json
+package.json
+
+node_modules
+

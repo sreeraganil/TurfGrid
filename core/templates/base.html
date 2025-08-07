@@ -5,11 +5,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel='icon' href='{% static "images/logo.ico" %}' type="image/png" />
+    <link rel='stylesheet' href='{% static "css/output.css" %}' />
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
     <title>{% block title %}TurfGrid - Find & Reserve Your Perfect Pitch.{% endblock %}</title>
 
     {% block extra_head %}{% endblock %}
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
     <script>
       setTimeout(() => {
         document.querySelectorAll(".animate-fade-in-down").forEach((el) => {
