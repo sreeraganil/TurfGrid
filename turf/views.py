@@ -10,6 +10,8 @@ from django.utils import timezone
 from decimal import Decimal, InvalidOperation
 from haversine import haversine, Unit
 import math
+from django.core.paginator import Paginator
+from datetime import date
 
 @never_cache
 def find_turf(request):
@@ -217,7 +219,8 @@ def favourites(request):
 @login_required(login_url='login')
 def book_turf(request, turf_id):
     turf = get_object_or_404(Turf, id=turf_id)
-    today = timezone.localdate()
+    # today = timezone.localdate()
+    today = date.today()
 
     # Handle date selection from query parameters
     selected_date_str = request.GET.get('booking_date')
@@ -301,4 +304,72 @@ def book_turf(request, turf_id):
 @login_required(login_url='login')
 def booking_confirmation(request, booking_id):
     booking = get_object_or_404(TurfBooking, id=booking_id, user=request.user)
+    if booking.shown:
+        return redirect('booking_detail', booking_id = booking.id)
+    else:
+        booking.shown = True
+        booking.save()
     return render(request, 'booking_confirmation.html', {'booking': booking})
+
+
+def upcoming(request):
+    today = date.today()
+
+    # Filter only bookings for this user that are in the future
+    bookings_qs = (
+        TurfBooking.objects
+        .filter(user=request.user, booking_date__gte=today)
+        .order_by('booking_date', 'start_time')
+    )
+
+
+    # Pagination — 6 bookings per page
+    paginator = Paginator(bookings_qs, 6)
+    page_number = request.GET.get('page')
+    bookings = paginator.get_page(page_number)
+
+    return render(request, 'upcoming.html', {
+        'bookings': bookings
+    })
+
+
+
+
+
+@login_required
+def booking_detail(request, booking_id):
+    # Get the booking or return 404
+    booking = get_object_or_404(TurfBooking, id=booking_id, user=request.user)
+    
+    # Calculate additional context data
+    context = {
+        'booking': booking,
+        'page_title': f"Booking #{booking.id} - {booking.turf.name}",
+    }
+    
+    return render(request, 'booking_detail.html', context)
+
+
+
+@login_required
+def cancel_booking(request, booking_id):
+    if request.method == 'POST':
+        booking = get_object_or_404(TurfBooking, id=booking_id, user=request.user)
+        
+        # Check if booking can be cancelled
+        if booking.status not in ['pending', 'confirmed']:
+            messages.error(request, "This booking cannot be cancelled.")
+            return redirect('booking_detail', booking_id=booking.id)
+            
+        if booking.is_past:
+            messages.error(request, "Past bookings cannot be cancelled.")
+            return redirect('booking_detail', booking_id=booking.id)
+            
+        # Update booking status
+        booking.status = 'cancelled'
+        booking.save()
+        
+        messages.success(request, "Your booking has been cancelled successfully.")
+        return redirect('booking_detail', booking_id=booking.id)
+    
+    return redirect('bookings')

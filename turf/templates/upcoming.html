@@ -1,32 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}My Bookings{% endblock %}
+{% block title %}Upcoming Bookings{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8 max-w-7xl">
     <!-- Page Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-white">My Bookings</h1>
-            <p class="text-gray-800 mt-1">View and manage all your turf bookings</p>
+            <h1 class="text-2xl md:text-3xl font-bold text-white">Upcoming Bookings</h1>
+            <p class="text-gray-800 mt-1">Your scheduled turf sessions</p>
         </div>
         
-        <!-- Filter Controls -->
-        <div class="mt-4 md:mt-0 flex flex-wrap gap-3">
-            <a href="?status=upcoming" class="flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 shadow-sm hover:shadow-md {% if status == 'upcoming' %}ring-2 ring-purple-300{% endif %}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Upcoming
-            </a>
-            <a href="?status=past" class="flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600  text-white rounded-lg hover:bg-gray-50 transition-all duration-200 shadow-sm hover:shadow-md {% if status == 'past' %}ring-2 ring-purple-300{% endif %}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Past
-            </a>
-            <a href="{% url 'find_turf' %}" class="flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-sm hover:shadow-md ml-2">
+        <div class="mt-4 md:mt-0">
+            <a href="{% url 'find_turf' %}" class="flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-sm hover:shadow-md">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
@@ -40,29 +27,21 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for booking in bookings %}
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                    <div class="relative h-45 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
-                        {% if booking.turf.image %}
-                        <div class="relative h-full w-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
-                            <img class="h-full w-full object-cover object-center" src="{{ booking.turf.image.url }}" alt="{{ booking.turf.image }}" />
-                        </div>
-                        {% else %}
+                    {% if booking.turf.image %}
+                    <div class="relative h-50 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
+                        <img class="h-full w-full object-cover object-center" src="{{ booking.turf.image.url }}" alt="{{ booking.turf.image }}" />
+                    </div>
+                    {% else %}
+                    <!-- Turf Image Placeholder -->
+                    <div class="h-40 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                         </svg>
-                        {% endif %}
-                        {% if booking.is_past %}
-                        <span class="absolute top-3 right-3 bg-purple-500 bg-opacity-70 text-white text-xs px-2 py-1 rounded-full">
-                            Completed
-                        </span>
-                        {% else %}
-                        <span class="absolute top-3 right-3 bg-green-600 shadow-2xs bg-opacity-70 text-white text-xs px-2 py-1 rounded-full">
-                            Upcoming
-                        </span>
-                        {% endif %}
                     </div>
+                    {% endif %}
                     
                     <div class="p-6">
-                        <!-- Turf Info -->
+                        <!-- Turf Info with Status -->
                         <div class="flex justify-between items-start mb-4">
                             <div>
                                 <h2 class="text-xl font-bold text-gray-900">{{ booking.turf.name }}</h2>
@@ -74,16 +53,12 @@
                                     {{ booking.turf.location }}
                                 </p>
                             </div>
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium 
-                                {% if booking.status == 'confirmed' %}bg-green-100 text-green-800
-                                {% elif booking.status == 'pending' %}bg-yellow-100 text-yellow-800
-                                {% elif booking.status == 'cancelled' %}bg-red-100 text-red-800
-                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {% if booking.status == 'confirmed' %}bg-green-100 text-green-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
                                 {{ booking.get_status_display }}
                             </span>
                         </div>
 
-                        <!-- Booking Details -->
+                        <!-- Booking Timeline -->
                         <div class="space-y-3 mb-4">
                             <div class="flex items-center text-gray-700">
                                 <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center mr-3">
@@ -122,29 +97,56 @@
                             </div>
                         </div>
 
+                        <!-- Countdown/Days Until -->
+                        <div class="mt-4 p-3 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
+                            <div class="flex items-center justify-between">
+                                {% if booking.status != "cancelled" %}
+                                <div class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span class="text-sm font-medium text-blue-700">
+                                        {% if booking.days_until == 0 %}
+                                            <span class="font-bold">Today!</span>
+                                        {% elif booking.days_until == 1 %}
+                                            <span class="font-bold">Tomorrow</span>
+                                        {% else %}
+                                            In <span class="font-bold">{{ booking.days_until }} days</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                {% else %}
+                                <span></span>
+                                {% endif %}
+                                <span class="text-xs bg-white px-2 py-1 rounded-full text-blue-600 font-medium shadow-sm">
+                                    {{ booking.booking_date|date:"D, M j" }}
+                                </span>
+                            </div>
+                        </div>
+
                         <!-- Action Buttons -->
                         <div class="mt-6 pt-4 border-t border-gray-100 flex justify-end space-x-3">
-                            {% if booking.status == 'pending' or booking.status == 'confirmed' and booking.is_upcoming %}
-                                <form method="post" action="{% url 'cancel_booking' booking.id %}">
-                                    {% csrf_token %}
-                                    <button type="submit" 
-                                            onclick="return confirm('Are you sure you want to cancel this booking?')"
-                                            class="px-4 py-2 bg-red-50 text-red-600 text-sm rounded-lg hover:bg-red-100 transition-all duration-200 flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                        Cancel
-                                    </button>
-                                </form>
-                            {% endif %}
-                            
-                            <a href="{% url 'booking_detail' booking.id%}" class="px-4 py-2 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50 transition-all duration-200 flex items-center">
+                            <a href="{% url 'booking_detail' booking.id %}" class="px-4 py-2 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50 transition-all duration-200 flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
                                 Details
                             </a>
+                            
+                            {% if booking.status != "cancelled" %}
+                            <form method="post" action="{% url 'cancel_booking' booking.id%}">
+                                {% csrf_token %}
+                                <button type="submit" 
+                                        onclick="return confirm('Are you sure you want to cancel this booking?')"
+                                        class="px-4 py-2 bg-red-50 text-red-600 text-sm rounded-lg hover:bg-red-100 transition-all duration-200 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Cancel
+                                </button>
+                            </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -157,16 +159,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
             </div>
-            <h3 class="mt-4 text-xl font-medium text-gray-900">No bookings found</h3>
-            <p class="mt-2 text-gray-500">
-                {% if request.GET.status == 'upcoming' %}
-                    You don't have any upcoming bookings.
-                {% elif request.GET.status == 'past' %}
-                    You don't have any past bookings.
-                {% else %}
-                    You haven't made any bookings yet.
-                {% endif %}
-            </p>
+            <h3 class="mt-4 text-xl font-medium text-gray-900">No upcoming bookings</h3>
+            <p class="mt-2 text-gray-500">You don't have any scheduled turf sessions yet. Start by booking your first session!</p>
             <div class="mt-6">
                 <a href="{% url 'find_turf' %}" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 shadow-sm hover:shadow-md">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -178,42 +172,14 @@
         </div>
     {% endif %}
 
-    <!-- Pagination -->
-    {% if is_paginated %}
-        <div class="mt-12 flex justify-center">
-            <nav class="flex items-center space-x-2">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}" 
-                       class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all duration-200 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                        Previous
-                    </a>
-                {% endif %}
-                
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                        <span class="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg">{{ num }}</span>
-                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                        <a href="?page={{ num }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}" 
-                           class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all duration-200">
-                            {{ num }}
-                        </a>
-                    {% endif %}
-                {% endfor %}
-                
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}" 
-                       class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all duration-200 flex items-center">
-                        Next
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </a>
-                {% endif %}
-            </nav>
-        </div>
-    {% endif %}
+    <!-- View All Bookings Link -->
+    <div class="mt-12 text-center">
+        <a href="{% url 'bookings' %}" class="inline-flex items-center text-white hover:text-indigo-800 group font-medium">
+            View all bookings (past and upcoming)
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+        </a>
+    </div>
 </div>
 {% endblock %}

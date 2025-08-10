@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib import messages
 from .forms import CustomUserCreationForm
-from turf.models import Favourite, Turf
+from turf.models import Favourite, Turf, TurfBooking
+from datetime import date
 
 
 @never_cache
@@ -131,4 +132,25 @@ def toggle_favourite(request, turf_id):
 @login_required
 @never_cache
 def bookings(request):
-    return render(request, "bookings.html")
+    status = request.GET.get('status')
+    today = date.today()
+
+    if status == 'past':
+        bookings = TurfBooking.objects.filter(
+            user=request.user,
+            booking_date__lt=today
+        ).order_by('-booking_date')
+
+    elif status == 'upcoming':
+        bookings = TurfBooking.objects.filter(
+            user=request.user,
+            booking_date__gte=today
+        ).order_by('booking_date')
+
+    else:
+        bookings = request.user.bookings.all().order_by('-booking_date')
+
+    return render(request, "bookings.html", {
+        'bookings': bookings,
+        'status': status
+    })

@@ -3,6 +3,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
 from accounts.models import User
 from datetime import datetime, timedelta, time
+from django.utils import timezone
+
 
 class Amenity(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -63,7 +65,7 @@ class Turf(models.Model):
 
     @property
     def rating(self):
-        return self.reviews.aggregate(avg=models.Avg('rating'))['avg'] or 0
+        return round(self.reviews.aggregate(avg=models.Avg('rating'))['avg'] or 0, 1)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -139,6 +141,34 @@ class TurfBooking(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(blank=True)
+    shown = models.BooleanField(default=False)
+
+    @property
+    def duration(self):
+        """Returns booking duration in hours"""
+        start = datetime.combine(self.booking_date, self.start_time)
+        end = datetime.combine(self.booking_date, self.end_time)
+        return (end - start).seconds // 3600
+    
+    @property
+    def days_until(self):
+        """Returns days until booking date (or negative if past)"""
+        return (self.booking_date - timezone.now().date()).days
+    
+    @property
+    def days_since(self):
+        """Returns days since booking date (for past bookings)"""
+        return (timezone.now().date() - self.booking_date).days
+    
+    @property
+    def is_past(self):
+        """Returns True if booking date is in the past"""
+        return self.booking_date < timezone.now().date()
+    
+    @property
+    def is_upcoming(self):
+        """Returns True if booking is in the future"""
+        return not self.is_past and self.status in ['pending', 'confirmed']
 
 
 class TurfReview(models.Model):

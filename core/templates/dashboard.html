@@ -122,7 +122,7 @@
                     </svg>
                 </div>
             </div>
-            <a href="#" class="mt-auto inline-flex items-center justify-between px-4 py-2 bg-white/70 border border-purple-200 text-purple-700 font-medium rounded-lg hover:bg-white hover:text-purple-900 transition-all group">
+            <a href="{% url 'upcoming' %}" class="mt-auto inline-flex items-center justify-between px-4 py-2 bg-white/70 border border-purple-200 text-purple-700 font-medium rounded-lg hover:bg-white hover:text-purple-900 transition-all group">
                 <span>View schedule</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -278,7 +278,7 @@
                                 </div>
                             </div>
                             <div class="flex gap-2">
-                                <a href="#" class="flex-1 text-center px-3 py-2 text-sm font-medium text-purple-800 bg-purple-200 rounded-lg hover:bg-purple-300 transition">
+                                <a href="{% url 'booking_detail' booking.id %}" class="flex-1 text-center px-3 py-2 text-sm font-medium text-purple-800 bg-purple-200 rounded-lg hover:bg-purple-300 transition">
                                     Details
                                 </a>
                                 <a href="#" class="flex-1 text-center px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg hover:from-purple-700 hover:to-purple-800 transition shadow-sm hover:shadow-md">
@@ -287,17 +287,21 @@
                             </div>
                         </div>
                     </div>
+                    {% empty %}
+                    <h2 class="text-center mt-5 text-purple-700">No Booking Available</h2>
                     {% endfor %}
                     
                 </div>
-                <div class="p-4 bg-purple-100 text-center">
-                    <a href="{% url 'bookings' %}" class="text-sm font-medium text-purple-700 hover:text-purple-900 transition inline-flex items-center">
-                        View all bookings
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                    </a>
-                </div>
+                {% if user_bookings|length > 2 %}
+                    <div class="p-4 bg-purple-100 text-center">
+                        <a href="{% url 'bookings' %}" class="text-sm font-medium text-purple-700 hover:text-purple-900 transition inline-flex items-center">
+                            View all bookings
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
