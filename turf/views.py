@@ -388,7 +388,7 @@ def cancel_booking(request, booking_id):
 
 @login_required
 def print_receipt(request, booking_id):
-    order = get_object_or_404(TurfBooking, id=booking_id)
+    order = get_object_or_404(TurfBooking, id=booking_id, user=request.user)
     
     # Create a buffer for the PDF
     buffer = BytesIO()
