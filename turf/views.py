@@ -12,6 +12,16 @@ from haversine import haversine, Unit
 import math
 from django.core.paginator import Paginator
 from datetime import date
+from django.http import HttpResponse
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib.utils import ImageReader
+import qrcode
+from datetime import datetime
 
 @never_cache
 def find_turf(request):
@@ -302,8 +312,9 @@ def book_turf(request, turf_id):
 
 
 @login_required(login_url='login')
+@never_cache
 def booking_confirmation(request, booking_id):
-    booking = get_object_or_404(TurfBooking, id=booking_id, user=request.user)
+    booking = get_object_or_404(TurfBooking, id=int(booking_id), user=request.user)
     if booking.shown:
         return redirect('booking_detail', booking_id = booking.id)
     else:
@@ -373,3 +384,181 @@ def cancel_booking(request, booking_id):
         return redirect('booking_detail', booking_id=booking.id)
     
     return redirect('bookings')
+
+
+@login_required
+def print_receipt(request, booking_id):
+    order = get_object_or_404(TurfBooking, id=booking_id)
+    
+    # Create a buffer for the PDF
+    buffer = BytesIO()
+    
+    # Create the PDF object
+    p = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+    
+    # Generate QR code
+    qr = qrcode.QRCode(version=1, box_size=4, border=4)
+    qr.add_data(f"Booking ID: {order.id}\nTurf: {order.turf.name}\nDate: {order.booking_date}")
+    qr.make(fit=True)
+    qr_img = qr.make_image(fill_color="black", back_color="white")
+    qr_buffer = BytesIO()
+    qr_img.save(qr_buffer, format="PNG")
+    qr_buffer.seek(0)
+    
+    # Styles
+    # styles = getSampleStyleSheet()
+    # title_style = ParagraphStyle(
+    #     'Title',
+    #     parent=styles['Heading1'],
+    #     fontSize=18,
+    #     textColor=colors.HexColor('#4f46e5'),
+    #     spaceAfter=14
+    # )
+    # heading_style = ParagraphStyle(
+    #     'Heading2',
+    #     parent=styles['Heading2'],
+    #     fontSize=14,
+    #     textColor=colors.HexColor('#4f46e5'),
+    #     spaceAfter=6
+    # )
+    # normal_style = styles['Normal']
+    
+    # Header
+    p.setFillColor(colors.HexColor('#4f46e5'))
+    p.setFont("Helvetica-Bold", 24)
+    p.drawString(72, height - 72, "TurfGrid")
+    
+    p.setFillColor(colors.black)
+    p.setFont("Helvetica", 12)
+    p.drawString(width - 200, height - 72, "Booking Receipt")
+    p.drawString(width - 200, height - 90, f"#{order.id}")
+    
+    # Date and status
+    p.setFont("Helvetica", 10)
+    p.drawString(72, height - 120, f"Issued: {datetime.now().strftime('%b %d, %Y')}")
+    p.drawString(72, height - 140, f"Status: {order.get_status_display()}")
+    
+    # Booking Information
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(72, height - 180, "Booking Information")
+    
+    p.setFont("Helvetica", 10)
+    p.drawString(72, height - 200, f"Booking Reference: #{order.id}")
+    p.drawString(72, height - 220, f"Date: {order.booking_date}")
+    p.drawString(72, height - 240, f"Time Slot: {order.start_time.strftime('%H:%M')} - {order.end_time.strftime('%H:%M')}")
+    p.drawString(72, height - 260, f"Booked On: {order.created_at.strftime('%b %d, %Y %H:%M')}")
+    
+    # Turf Information
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(300, height - 180, "Turf Information")
+    
+    p.setFont("Helvetica", 10)
+    p.drawString(300, height - 200, f"Turf Name: {order.turf.name}")
+    p.drawString(300, height - 220, f"Location: {order.turf.location}")
+    p.drawString(300, height - 240, f"Contact: {order.turf.owner.phone or '-'}")
+    
+    # Customer Information
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(72, height - 300, "Customer Information")
+    
+    p.setFont("Helvetica", 10)
+    p.drawString(72, height - 320, f"Name: {order.user.fname} {order.user.lname}")
+    p.drawString(72, height - 340, f"Email: {order.user.email}")
+    p.drawString(72, height - 360, f"Phone: {getattr(order.user, 'phone', '-')}")
+    
+    # Draw QR code
+    qr_img_reader = ImageReader(qr_buffer)
+    p.drawImage(qr_img_reader, width - 120, height - 360, width=100, height=100)
+    p.setFont("Helvetica", 8)
+    p.drawString(width - 120, height - 370, "Scan for booking details")
+    
+    # Start Y position after customer info
+    y_position = height - 420  
+
+    # Payment Summary Title
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(72, y_position, "Payment Summary")
+
+    # Move Y down before table
+    y_position -= 20  
+
+    data = [
+        ["Description", "Amount (Rupees)"],
+        ["Turf Booking Fee", f"{order.total_amount:.2f}"],
+        ["Taxes & Fees", "0.00"],
+        ["Discount", "0.00"],
+        ["Total Amount", f"{order.total_amount:.2f}"],
+        ["Payment Method", order.payment_method or "Online Payment"],
+        ["Payment Status", f"Paid on {order.created_at.strftime('%b %d, %Y')}"]
+    ]
+
+    table = Table(data, colWidths=[300, 110])
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#e0e7ff')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.HexColor('#4f46e5')),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 4), (-1, 4), colors.HexColor('#f3f4f6')),
+        ('FONTNAME', (0, 4), (-1, 4), 'Helvetica-Bold'),
+        ('GRID', (0, 0), (-1, -1), 1, colors.HexColor('#e5e7eb')),
+    ]))
+
+    table_width, table_height = table.wrap(0, 0)
+    table.drawOn(p, 72, y_position - table_height)
+
+    # Update y_position after table
+    y_position -= (table_height + 30)
+    
+    # Terms and Conditions
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(72, y_position, "Terms & Conditions")
+
+    # Move below heading
+    y_position -= 20
+
+    terms = [
+        "1. This receipt serves as proof of booking. Please present it when you arrive.",
+        "2. Cancellations must be made at least 24 hours before the booking time for a full refund.",
+        "3. TurfGrid reserves the right to cancel bookings due to unforeseen circumstances.",
+        "4. For any disputes, please contact our support team within 7 days of booking."
+    ]
+
+    p.setFont("Helvetica", 10)
+    for term in terms:
+        p.drawString(72, y_position, term)
+        y_position -= 20
+
+    
+    # Footer
+    p.setFont("Helvetica", 9)
+    p.drawCentredString(width/2, 50, "Thank you for choosing TurfGrid! We hope you enjoy your game.")
+    p.drawCentredString(width/2, 35, "For any queries, contact support@turfgrid.com or call +91 98765 43210")
+    p.drawCentredString(width/2, 20, "This is an electronically generated receipt. No signature required.")
+    
+    # Watermark
+    p.saveState()
+    p.translate(width/2, height/2)
+    p.rotate(45)
+    try:
+        p.setFillColor(colors.HexColor('#4f46e5'))
+        p.setFillAlpha(0.05)
+    except AttributeError:
+        p.setFillColor(colors.HexColor('#d0d4f7'))  # light color fallback
+    p.setFont("Helvetica-Bold", 72)
+    p.drawCentredString(0, 0, "TURFGRID")
+    p.restoreState()
+    
+    # Save the PDF
+    p.showPage()
+    p.save()
+    
+    buffer.seek(0)
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="receipt_{order.id}.pdf"'
+    return response
+
+
+

@@ -142,6 +142,7 @@ class TurfBooking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(blank=True)
     shown = models.BooleanField(default=False)
+    payment_method = models.CharField(default="Online Payment")
 
     @property
     def duration(self):

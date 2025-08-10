@@ -3,77 +3,257 @@
 {% block title %}Booking Confirmation - TurfGrid{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+<div id='tsparticles' class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-7 px-4 sm:px-6 lg:px-8">
   <div class="max-w-3xl mx-auto">
-    <div class="text-center mb-8">
-      <svg class="mx-auto h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-      </svg>
-      <h1 class="mt-2 text-3xl font-bold text-gray-900">Booking Confirmed!</h1>
-      <p class="mt-2 text-lg text-gray-600">Your booking at {{ booking.turf.name }} has been confirmed.</p>
+    <!-- Confirmation Header with Animation -->
+    <div class="text-center mb-10 animate-fade-in">
+      <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100">
+        <svg class="h-10 w-10 text-green-600 animate-checkmark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h1 class="mt-4 text-3xl font-extrabold text-gray-900 sm:text-4xl">
+        Booking Confirmed!
+      </h1>
+      <p class="mt-3 text-xl text-gray-600">
+        Your reservation at <span class="font-semibold text-blue-600">{{ booking.turf.name }}</span> is confirmed.
+      </p>
+      <div class="mt-4 px-4 py-2 bg-blue-100 text-blue-800 rounded-full inline-flex items-center text-sm">
+        <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Confirmed on {{ booking.created_at|date:"M j, Y H:i" }}
+      </div>
     </div>
 
-    <div class="bg-white shadow overflow-hidden rounded-lg">
-      <div class="px-4 py-5 sm:p-6">
-        <div class="flex flex-col md:flex-row gap-6 mb-8">
-          {% if booking.turf.image %}
-          <div class="w-full md:w-1/3">
-            <img src="{{ booking.turf.image.url }}" alt="{{ booking.turf.name }}" class="w-full h-auto rounded-lg object-cover">
+    <!-- Booking Card with Shadow and Hover Effect -->
+    <div class="bg-white shadow-xl rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl">
+      <!-- Turf Image Header -->
+      <div class="relative h-55 bg-gradient-to-r from-blue-500 to-indigo-600 overflow-hidden">
+        {% if booking.turf.image %}
+          <img src="{{ booking.turf.image.url }}" alt="{{ booking.turf.name }}" class="w-full h-full object-cover opacity-90">
+        {% else %}
+          <div class="flex items-center justify-center h-full">
+            <svg class="h-20 w-20 text-white opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
           </div>
-          {% endif %}
-          <div class="flex-1">
-            <h2 class="text-xl font-bold text-gray-900 mb-2">{{ booking.turf.name }}</h2>
-            <div class="space-y-3">
-              <div class="flex justify-between">
-                <span class="text-gray-600">Booking ID:</span>
-                <span class="font-medium">#{{ booking.id }}</span>
+        {% endif %}
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+          <h2 class="text-2xl font-bold text-white">{{ booking.turf.name }}</h2>
+          <p class="text-blue-200 flex items-center">
+            <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {{ booking.turf.location }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Booking Details -->
+      <div class="p-6 sm:p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <!-- Left Column -->
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center mr-4">
+                <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
               </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600">Date:</span>
-                <span class="font-medium">{{ booking.booking_date }}</span>
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Booking Date</h3>
+                <p class="text-lg font-semibold text-gray-900">{{ booking.booking_date }}</p>
+                <p class="text-sm text-gray-500 mt-1">
+                  {% if booking.is_upcoming %}
+                    {% if booking.days_until == 0 %}
+                      <span class="text-green-600 font-medium">Today!</span>
+                    {% elif booking.days_until == 1 %}
+                      <span class="text-blue-600 font-medium">Tomorrow</span>
+                    {% else %}
+                      In {{ booking.days_until }} day{{ booking.days_until|pluralize }}
+                    {% endif %}
+                  {% else %}
+                    Completed
+                  {% endif %}
+                </p>
               </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600">Time:</span>
-                <span class="font-medium">{{ booking.start_time|time:"H:i" }} - {{ booking.end_time|time:"H:i" }}</span>
+            </div>
+
+            <div class="flex items-start">
+              <div class="flex-shrink-0 h-10 w-10 rounded-full bg-purple-50 flex items-center justify-center mr-4">
+                <svg class="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
               </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600">Duration:</span>
-                <span class="font-medium">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Time Slot</h3>
+                <p class="text-lg font-semibold text-gray-900">
+                  {{ booking.start_time|time:"H:i" }} - {{ booking.end_time|time:"H:i" }}
+                </p>
+                <p class="text-sm text-gray-500 mt-1">
                   {% with duration=booking.get_duration %}
-                    {{ duration }} hour{{ duration|pluralize }}
+                    {{ duration }} hour{{ duration|pluralize }} session
                   {% endwith %}
-                </span>
+                </p>
               </div>
-              <div class="flex justify-between border-t border-gray-200 pt-3 mt-3">
-                <span class="text-gray-900 font-medium">Total Amount:</span>
-                <span class="font-bold text-lg">₹{{ booking.total_amount|floatformat:0 }}</span>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 h-10 w-10 rounded-full bg-green-50 flex items-center justify-center mr-4">
+                <svg class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Booked By</h3>
+                <p class="text-lg font-semibold text-gray-900">
+                  {{ booking.user.get_full_name|default:booking.user.fname }}
+                </p>
+                <p class="text-sm text-gray-500 mt-1">
+                  {{ booking.user.email }}
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <div class="flex-shrink-0 h-10 w-10 rounded-full bg-amber-50 flex items-center justify-center mr-4">
+                <svg class="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Payment</h3>
+                <p class="text-lg font-semibold text-gray-900">
+                  ₹{{ booking.total_amount|floatformat:0 }}
+                </p>
+                <p class="text-sm text-gray-500 mt-1">
+                  {% if booking.payment_method %}
+                    Paid via {{ booking.payment_method }}
+                  {% else %}
+                    Payment completed
+                  {% endif %}
+                </p>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- Additional Notes -->
         <div class="mt-6">
-          <h3 class="text-lg font-medium text-gray-900 mb-2">Booking Details</h3>
-          <div class="bg-gray-50 p-4 rounded-lg">
+          <h3 class="text-lg font-medium text-gray-900 mb-3">Additional Information</h3>
+          <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
             {% if booking.notes %}
-              <p class="text-gray-600">{{ booking.notes }}</p>
+              <p class="text-gray-700">{{ booking.notes }}</p>
             {% else %}
               <p class="text-gray-500 italic">No additional notes provided</p>
             {% endif %}
           </div>
         </div>
 
-        <div class="mt-8 flex flex-col sm:flex-row justify-center gap-3">
-          {% comment %} {% url 'user_bookings' %} {% endcomment %}
-          <a href="#" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-lg font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-            View My Bookings
-          </a>
-          <a href="{% url 'turf_detail' booking.turf.slug %}" class="inline-flex justify-center py-3 px-6 border border-gray-300 shadow-sm text-lg font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-            Back to Turf
-          </a>
+        <!-- Booking ID and Status -->
+        <div class="mt-6 pt-6 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center">
+          <div class="text-sm text-gray-500 mb-4 sm:mb-0">
+            Booking ID: <span class="font-mono text-gray-700">#{{ booking.id }}</span>
+          </div>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
+            {% if booking.status == 'confirmed' %}bg-green-100 text-green-800
+            {% elif booking.status == 'pending' %}bg-yellow-100 text-yellow-800
+            {% elif booking.status == 'cancelled' %}bg-red-100 text-red-800
+            {% else %}bg-blue-100 text-blue-800{% endif %}">
+            {{ booking.status }}
+          </span>
         </div>
       </div>
     </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3 print:hidden">
+      <a href="{% url 'bookings' %}" class="inline-flex justify-center items-center px-6 py-4 border border-transparent text-lg font-medium rounded-xl shadow-sm text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 transform hover:-translate-y-1">
+        <svg class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        My Bookings
+      </a>
+      <a href="{% url 'turf_detail' booking.turf.slug %}" class="inline-flex justify-center items-center px-6 py-4 border border-gray-300 text-lg font-medium rounded-xl shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+        <svg class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+        </svg>
+        View Turf
+      </a>
+      <a href="{% url 'download_receipt' booking.id %}" class="inline-flex justify-center items-center px-6 py-4 border border-transparent text-lg font-medium rounded-xl shadow-sm text-white bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+        <svg class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        Print Receipt
+      </a>
+    </div>
+
+    <!-- Help Section -->
+    <div class="mt-12 text-center">
+      <h3 class="text-lg font-medium text-gray-900">Need help with your booking?</h3>
+      <p class="mt-2 text-gray-600">
+        Contact our support team at <a href="mailto:support@turfgrid.com" class="text-blue-600 hover:text-blue-800">support@turfgrid.com</a> or call <a href="tel:+919876543210" class="text-blue-600 hover:text-blue-800">+91 98765 43210</a>
+      </p>
+    </div>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+<script>
+  window.onload = function() {
+    const end = Date.now() + 5 * 1000;
+
+    // go Buckeyes!
+    const colors = ["#800080", "#8A2BE2", "#4B0082", "#ffffff", "#808080"];
+
+
+    function frame() {
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: colors,
+      });
+
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: colors,
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    }
+
+    frame();
+  };
+</script>
+
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  .animate-checkmark {
+    animation: checkmark 0.5s cubic-bezier(0.42, 0, 0.27, 1.55) forwards;
+  }
+  @keyframes checkmark {
+    0% { opacity: 0; transform: scale(0); }
+    80% { transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+</style>
 {% endblock %}
