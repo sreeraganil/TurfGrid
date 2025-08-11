@@ -73,25 +73,13 @@
             </svg>
           </button>
           {% if request.user.is_authenticated %}
-          <a
-                  href="{% url 'toggle_favourite' turf.id %}?next={{ request.path }}"
-                  class="flex items-center justify-center p-2 bg-purple-400 rounded-full shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none"
-                  title="Toggle favourite"
-                >
-                  <svg
-                    class="h-5 w-5 transition-colors duration-300 ease-in-out"
-                    fill="{% if turf.id in favourited_turf_ids %}red{% else %}none{% endif %}"
-                    stroke="{% if turf.id in favourited_turf_ids %}red{% else %}currentColor{% endif %}"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                </a>
+          <button onclick="toggleFavourite()" class="p-2.5 bg-purple-400 bg-opacity-10 rounded-full hover:bg-opacity-20 transition-colors">
+            <svg id="heart-icon" class="h-5 w-5" fill="{% if turf.id in favourited_turf_ids %}red{% else %}none{% endif %}" 
+                 stroke="{% if turf.id in favourited_turf_ids %}red{% else %}white{% endif %}" 
+                 viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </button>
           {% endif %}
         </div>
       </div>
@@ -107,7 +95,7 @@
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
           <div class="relative aspect-w-16 aspect-h-9 bg-gray-200">
             {% if turf.image %}
-            <img class="w-full h-full object-cover" src="{{ turf.image.url }}" alt="{{ turf.name }}"/>
+            <img id="main-image" class="w-full max-h-96 object-cover" src="{{ turf.image.url }}" alt="{{ turf.name }}"/>
             {% else %}
             <div class="w-full min-h-62 flex items-center justify-center text-gray-400">
               <svg class="h-80 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -119,6 +107,25 @@
               <span class="text-purple-600">₹{{ turf.price_per_hour|floatformat:0 }}</span>
               per hour
             </div>
+          </div>
+          
+          <!-- Thumbnail Gallery -->
+          <div class="p-4 flex flex-wrap gap-2" id="image-thumbnails">
+            {% if turf.image %}
+              <button onclick="changeMainImage(this, '{{ turf.image.url }}')" 
+                      class="w-20 h-16 overflow-hidden rounded-md border-purple-500 ring-2 ring-purple-600" 
+                      aria-current="true">
+                <img class="w-full h-full object-cover" src="{{ turf.image.url }}" alt="{{ turf.name }}" />
+              </button>
+              {% endif %}
+
+              {% for turf_img in turf.images.all %}
+              <button onclick="changeMainImage(this, '{{ turf_img.image.url }}')" 
+                      class="w-20 h-16 overflow-hidden rounded-md border border-gray-200 hover:border-purple-300 transition-all" 
+                      aria-current="false">
+                <img class="w-full h-full object-cover" src="{{ turf_img.image.url }}" alt="{{ turf.name }}" />
+              </button>
+            {% endfor %}
           </div>
         </div>
 
@@ -429,6 +436,48 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});
+
+  });
+  
+  function changeMainImage(button, imageUrl) {
+    const mainImage = document.getElementById('main-image');
+    if (mainImage) {
+      mainImage.src = imageUrl;
+    }
+
+    // Remove ring from all buttons
+    const thumbnails = document.querySelectorAll('#image-thumbnails button');
+    thumbnails.forEach(btn => {
+      btn.classList.remove('ring-2', 'ring-purple-600', 'border-purple-500');
+      btn.classList.add('border', 'border-gray-200');
+      btn.setAttribute('aria-current', 'false');
+    });
+
+    // Add ring to the clicked button
+    button.classList.add('ring-2', 'ring-purple-600', 'border-purple-500');
+    button.classList.remove('border', 'border-gray-200');
+    button.setAttribute('aria-current', 'true');
+}
+  
+  async function toggleFavourite() {
+      try {
+          const response = await fetch("{% url 'toggle_favourite' turf.id %}", {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+          });
+          if (response.ok) {
+              const data = await response.json();
+              const heartIcon = document.getElementById('heart-icon');
+              if (data.status === 'added') {
+                  heartIcon.setAttribute('fill', 'red');
+                  heartIcon.setAttribute('stroke', 'red');
+              } else {
+                  heartIcon.setAttribute('fill', 'none');
+                  heartIcon.setAttribute('stroke', 'white');
+              }
+          }
+      } catch (error) {
+          console.error('Error:', error);
+      }
+  }
 </script>
 {% endblock %}

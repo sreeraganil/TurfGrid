@@ -12,4 +12,6 @@ urlpatterns = [
     path('notifications/create/', views.create_notification, name='create_notification'),
     path('notifications/<int:notification_id>/edit/', views.edit_notification, name='edit_notification'),
     path('notifications/<int:notification_id>/delete/', views.delete_notification, name='delete_notification'), 
+    path('turf/<int:turf_id>/images/', views.add_turf_images, name='add_turf_images'), 
+    path('image/<int:image_id>/delete/', views.delete_image, name='delete_image'), 
 ]

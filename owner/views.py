@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Sum, Avg, Q
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
-from turf.models import Turf, TurfBooking, TurfReview
+from turf.models import Turf, TurfBooking, TurfReview, TurfImage
 from django.views.decorators.http import require_http_methods
 from datetime import datetime, date
 from django.contrib.auth.decorators import  user_passes_test
@@ -246,3 +246,28 @@ def delete_notification(request, notification_id):
     
     notification.delete()
     return redirect('owner_dashboard')
+
+
+
+@user_passes_test(lambda u: u.is_authenticated and u.role == "owner")
+def add_turf_images(request, turf_id):
+    turf = get_object_or_404(Turf, id=turf_id)
+
+    if request.method == "POST":
+        images = request.FILES.getlist('images')  # Grab multiple files
+        for img in images:
+            TurfImage.objects.create(turf=turf, image=img)
+        return redirect('owner_manage_turf', id=turf.id)  # Change to your actual detail view name
+
+    return render(request, "add_turf_images.html", {"turf": turf})
+
+def delete_image(request, image_id):
+    image = TurfImage.objects.get(id = image_id)
+
+    if request.user !=  image.turf.owner:
+        return redirect('dashboard')
+    
+    next = request.GET.get("turf-id")
+    
+    image.delete()
+    return redirect(next)

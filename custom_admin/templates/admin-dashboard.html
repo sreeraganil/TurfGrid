@@ -105,6 +105,23 @@
           View financial reports
         </a>
       </div>
+      <!-- Add this card to your stats grid -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-500">Active Notifications</p>
+            <h3 class="text-2xl font-bold text-gray-900">{{ active_notifications_count }}</h3>
+          </div>
+          <div class="p-3 bg-indigo-100 rounded-full">
+            <svg class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+          </div>
+        </div>
+        <a href="#notifications-section" class="mt-4 inline-flex items-center text-sm font-medium text-purple-600 hover:text-purple-500">
+          Manage notifications
+        </a>
+      </div>
     </div>
 
     <!-- Users Section -->
@@ -367,6 +384,90 @@
         <!-- Pagination would go here -->
       </div>
     </div>
+     <!-- Notifications Section -->
+  <div id="notifications-section" class="bg-white rounded-lg shadow overflow-hidden mt-8">
+    <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-gray-900">Notifications Management</h2>
+      <a href="" class="text-sm font-medium text-purple-600 hover:text-purple-500">
+        + Create Notification
+      </a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Turfs</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Range</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for notification in notifications %}
+          <tr class="{% if notification.is_visible %}bg-white{% else %}bg-gray-50{% endif %}">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="font-medium text-gray-900">{{ notification.title }}</div>
+              <div class="text-sm text-gray-500 mt-1">{{ notification.message|truncatechars:50 }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                {% if notification.type == 'offer' %}bg-yellow-100 text-yellow-800
+                {% elif notification.type == 'alert' %}bg-red-100 text-red-800
+                {% else %}bg-blue-100 text-blue-800{% endif %}">
+                {{ notification.get_type_display }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {% if notification.turfs.all %}
+                <div class="text-sm text-gray-900">
+                  {% for turf in notification.turfs.all|slice:":2" %}
+                    {{ turf.name }}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                  {% if notification.turfs.count > 2 %} +{{ notification.turfs.count|add:"-2" }} more{% endif %}
+                </div>
+              {% else %}
+                <span class="text-sm text-gray-500">All Turfs</span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {% if notification.is_visible %}
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  Active
+                </span>
+              {% else %}
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                  Inactive
+                </span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <div>Start: {{ notification.start_date }}</div>
+              <div>End: {% if notification.end_date %}{{ notification.end_date }}{% else %}None{% endif %}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <a href="" class="text-purple-600 hover:text-purple-900 mr-3">Edit</a>
+              <a href="" class="text-blue-600 hover:text-blue-900 mr-3">
+                {% if notification.is_active %}Deactivate{% else %}Activate{% endif %}
+              </a>
+              <a href="" class="text-red-600 hover:text-red-900">Delete</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+              No notifications found
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+      <!-- Pagination would go here -->
+    </div>
+  </div>
   </div>
 </div>
 {% endblock %}

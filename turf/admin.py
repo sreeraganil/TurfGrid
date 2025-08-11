@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Turf, TurfBooking, TurfReview, Amenity, Favourite
+from .models import Turf, TurfBooking, TurfReview, Amenity, Favourite, TurfImage
 
 
 @admin.register(Amenity)
@@ -36,3 +36,7 @@ class FavouriteAdmin(admin.ModelAdmin):
     list_display = ['user', 'turf', 'created_at']
     list_filter = ['created_at']
     search_fields = ['user__email', 'turf__name']
+
+@admin.register(TurfImage)
+class AdminTurfImage(admin.ModelAdmin):
+    pass

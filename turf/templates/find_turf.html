@@ -57,8 +57,8 @@
             <div class="mb-6">
               <h3 class="text-sm font-medium text-gray-700 mb-2">Price Range</h3>
               <div class="space-y-2">
-                 <input type="number" name="min_price" placeholder="Min" value="{{ values.min_price }}" class="block w-full pl-2 pr-3 py-2 border-gray-300 rounded-md sm:text-sm border-2 border-purple-300"/>
-                 <input type="number" name="max_price" placeholder="Max" value="{{ values.max_price }}" class="block w-full pl-2 pr-3 py-2 border-gray-300 rounded-md sm:text-sm border-2 border-purple-300"/>
+                 <input type="number" name="min_price" placeholder="Min" value="{{ values.min_price }}" class="block w-full pl-2 pr-3 py-2  rounded-md sm:text-sm border-2 border-purple-300"/>
+                 <input type="number" name="max_price" placeholder="Max" value="{{ values.max_price }}" class="block w-full pl-2 pr-3 py-2 rounded-md sm:text-sm border-2 border-purple-300"/>
               </div>
             </div>
 
@@ -126,17 +126,17 @@
                 {% if request.user.is_authenticated %}
                 <!-- Favorite Button -->
                 <div class="absolute top-3 right-3">
-                  <a href="{% url 'toggle_favourite' turf.id %}?next={{ request.path }}" 
-                    class="flex items-center justify-center p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:shadow-lg transition-all duration-200"
-                    title="{% if turf.id in favourited_turf_ids %}Remove from favorites{% else %}Add to favorites{% endif %}">
-                    <svg class="h-5 w-5 transition-colors duration-300 ease-in-out" 
-                        fill="{% if turf.id in favourited_turf_ids %}red{% else %}none{% endif %}" 
-                        stroke="{% if turf.id in favourited_turf_ids %}red{% else %}currentColor{% endif %}" 
-                        viewBox="0 0 24 24" 
-                        stroke-width="2">
-                      <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                    </svg>
-                  </a>
+                  <button type="button" onclick="toggleFavourite({{ turf.id }})"
+                      class="p-2.5 bg-white bg-opacity-10 rounded-full hover:bg-opacity-20 transition-colors">
+                      <svg id="heart-icon-{{ turf.id }}" class="h-5 w-5"
+                          fill="{% if turf.id in favourited_turf_ids %}red{% else %}none{% endif %}" 
+                          stroke="{% if turf.id in favourited_turf_ids %}red{% else %}black{% endif %}" 
+                          viewBox="0 0 24 24" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" 
+                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364
+                              L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                  </button>
                 </div>
                 {% endif %}
               </div>
@@ -251,6 +251,28 @@
     window.location.href = url.toString();
   }
 });
+
+async function toggleFavourite(turf_id) {
+      try {
+          const response = await fetch(`/account/toggle-favourite/${turf_id}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+          });
+          if (response.ok) {
+              const data = await response.json();
+              const heartIcon = document.getElementById(`heart-icon-${turf_id}`);
+              if (data.status === 'added') {
+                  heartIcon.setAttribute('fill', 'red');
+                  heartIcon.setAttribute('stroke', 'red');
+              } else {
+                  heartIcon.setAttribute('fill', 'none');
+                  heartIcon.setAttribute('stroke', 'black');
+              }
+          }
+      } catch (error) {
+          console.error('Error:', error);
+      }
+  }
+
 
 </script>
 

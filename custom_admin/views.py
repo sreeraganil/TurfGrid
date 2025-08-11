@@ -3,8 +3,10 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from accounts.models import User
 from django.contrib.sessions.models import Session
 from turf.models import Turf, TurfBooking, TurfReview
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from datetime import date
+from owner.models import Notification
+from django.utils import timezone
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
@@ -24,6 +26,15 @@ def admin_dashboard(request):
     turfs = Turf.objects.all().order_by('-created_at')[:10]
     bookings = TurfBooking.objects.all().order_by('-created_at')[:10]
     reviews = TurfReview.objects.all().order_by('-created_at')[:5]
+
+
+    notifications = Notification.objects.all().order_by('-start_date')
+    active_notifications_count = Notification.objects.filter(
+        is_active=True,
+        start_date__lte=timezone.now().date()
+    ).filter(
+        Q(end_date__gte=timezone.now().date()) | Q(end_date__isnull=True)
+    ).count()
     
     context = {
         'users_count': users_count,
@@ -34,6 +45,8 @@ def admin_dashboard(request):
         'turfs': turfs,
         'bookings': bookings,
         'reviews': reviews,
+        'notifications': notifications,
+        'active_notifications_count': active_notifications_count,
     }
     
     return render(request, 'admin-dashboard.html', context)

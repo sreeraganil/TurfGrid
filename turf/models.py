@@ -121,6 +121,15 @@ class Turf(models.Model):
         total_hours = (datetime.combine(today, self.closing) - 
                       datetime.combine(today, self.opening)).seconds // 3600
         return min(total_hours, 4)
+    
+
+
+class TurfImage(models.Model):
+    turf = models.ForeignKey(Turf, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='turfs/more/')
+
+    def __str__(self):
+        return f"{self.turf.name} - {self.id}"
 
 
 

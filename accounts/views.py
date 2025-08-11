@@ -7,9 +7,9 @@ from .forms import CustomUserCreationForm
 from turf.models import Favourite, Turf, TurfBooking
 from datetime import date
 from django.db.models import Q
-from owner.models import Notification, UserNotification
-from django.utils import timezone
+from owner.models import UserNotification
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 
 @never_cache
@@ -126,7 +126,15 @@ def toggle_favourite(request, turf_id):
 
     if not created:
         favourite.delete()
+        status = 'removed'
+    else:
+        status = 'added'
 
+    # If AJAX request, return JSON
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'status': status})
+
+    # Otherwise fallback to redirect
     next_url = request.GET.get('next')
     if next_url:
         return redirect(next_url)
