@@ -6,6 +6,10 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm
 from turf.models import Favourite, Turf, TurfBooking
 from datetime import date
+from django.db.models import Q
+from owner.models import Notification, UserNotification
+from django.utils import timezone
+from django.core.paginator import Paginator
 
 
 @never_cache
@@ -154,3 +158,66 @@ def bookings(request):
         'bookings': bookings,
         'status': status
     })
+
+
+
+
+@login_required
+def notifications_list(request):
+    # Get all notifications for the current user
+    user_notifications = request.user.notifications.all().order_by('-created_at')
+    
+    # Apply filters
+    search_query = request.GET.get('search')
+    type_filter = request.GET.get('type')
+    status_filter = request.GET.get('status')
+
+    if search_query:
+        user_notifications = user_notifications.filter(
+            Q(notification__title__icontains=search_query) | 
+            Q(notification__message__icontains=search_query))
+    
+    if type_filter:
+        user_notifications = user_notifications.filter(notification__type=type_filter)
+    
+    if status_filter == 'read':
+        user_notifications = user_notifications.filter(is_read=True)
+    elif status_filter == 'unread':
+        user_notifications = user_notifications.filter(is_read=False)
+
+    # Count unread notifications
+    unread_count = request.user.notifications.filter(is_read=False).count()
+
+    # Pagination
+    paginator = Paginator(user_notifications, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'user_notifications': page_obj,
+        'unread_count': unread_count,
+        'page_obj': page_obj,
+        'is_paginated': paginator.num_pages > 1,
+    }
+    return render(request, 'notifications_list.html', context)
+
+@login_required
+def mark_notification_read(request, notification_id):
+    user_notification = get_object_or_404(
+        UserNotification, 
+        id=notification_id, 
+        user=request.user
+    )
+    user_notification.is_read = True
+    user_notification.save()
+    return redirect('notifications_list')
+
+@login_required
+def delete_notification(request, notification_id):
+    user_notification = get_object_or_404(
+        UserNotification, 
+        id=notification_id, 
+        user=request.user
+    )
+    user_notification.delete()
+    return redirect('notifications_list')

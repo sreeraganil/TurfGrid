@@ -9,4 +9,7 @@ urlpatterns = [
     path('turf/<int:id>/delete/', views.turf_delete, name='owner_delete_turf'),
     path('manage-bookings/', views.manage_bookings, name='manage_bookings'),
     path('payments/', views.view_payments, name='view_payments'),
+    path('notifications/create/', views.create_notification, name='create_notification'),
+    path('notifications/<int:notification_id>/edit/', views.edit_notification, name='edit_notification'),
+    path('notifications/<int:notification_id>/delete/', views.delete_notification, name='delete_notification'), 
 ]

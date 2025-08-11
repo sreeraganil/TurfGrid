@@ -29,13 +29,15 @@ def dashboard(request):
     )
 
     user_bookings = request.user.bookings.all().order_by('-created_at')
+    notification = request.user.notifications.filter(is_read = False)
 
     context = {
         'upcoming_bookings': upcoming_bookings,
         'now': now,
         'today': today,
         'current_time': current_time,
-        'user_bookings': user_bookings
+        'user_bookings': user_bookings,
+        'notification': notification
     }
     return render(request, 'dashboard.html', context)
 

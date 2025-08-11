@@ -1,27 +1,24 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Turf, Amenity, TurfBooking
 from django.db.models import Q, Avg
-from datetime import datetime
 from django.contrib import messages
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.utils import timezone
 from decimal import Decimal, InvalidOperation
 from haversine import haversine, Unit
 import math
 from django.core.paginator import Paginator
-from datetime import date
 from django.http import HttpResponse
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Table, TableStyle
 from reportlab.lib.utils import ImageReader
 import qrcode
-from datetime import datetime
 
 @never_cache
 def find_turf(request):

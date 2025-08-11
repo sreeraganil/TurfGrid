@@ -11,4 +11,7 @@ urlpatterns = [
     path('update-profile/', views.update_profile, name = 'update_profile'),
     path('toggle-favourite/<int:turf_id>', views.toggle_favourite, name = 'toggle_favourite'),
     path('bookings', views.bookings, name = 'bookings'),
+    path('notifications/', views.notifications_list, name='notifications_list'),
+    path('notifications/<int:notification_id>/read/', views.mark_notification_read, name='mark_notification_read'),
+    path('notifications/<int:notification_id>/delete/', views.delete_notification, name='delete_notification'),
 ]
