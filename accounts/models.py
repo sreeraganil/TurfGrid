@@ -34,6 +34,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
     is_blocked =  models.BooleanField(default=False)
     profile_pic = models.ImageField(upload_to='profile/images/', null=True, blank=True)
+    otp = models.CharField(blank=True, max_length=6, null=True)
+    otp_exp = models.DateTimeField(blank=True, null=True)
 
     objects = UserManager()
 

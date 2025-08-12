@@ -5,11 +5,19 @@ from django.views.decorators.cache import never_cache
 from django.contrib import messages
 from .forms import CustomUserCreationForm
 from turf.models import Favourite, Turf, TurfBooking
-from datetime import date
+from datetime import date, timedelta
 from django.db.models import Q
 from owner.models import UserNotification
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+from .models import User
+from django.core.mail import send_mail
+import random
+from django.conf import settings as django_settings
+from django.contrib.auth import get_user_model
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 
 @never_cache
@@ -229,3 +237,84 @@ def delete_notification(request, notification_id):
     )
     user_notification.delete()
     return redirect('notifications_list')
+
+
+User = get_user_model()
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def password_reset_api(request):
+    if request.method == "GET":
+        return render(request, "password_reset.html")
+
+    step = request.POST.get("step")
+
+    if step == "send_otp":
+        email = request.POST.get("email")
+        if not email:
+            return JsonResponse({"status": "error", "message": "Email is required."}, status=400)
+
+        try:
+            user = User.objects.get(email=email)
+            otp = random.randint(100000, 999999)
+            otp_exp = timezone.now() + timedelta(minutes=15) # OTP expires in 15 minutes
+
+            user.otp = otp
+            user.otp_exp = otp_exp
+            user.save()
+
+            send_mail(
+                "Password Reset OTP",
+                f"Your OTP is {otp}. It will expire in 15 minutes.",
+                django_settings.DEFAULT_FROM_EMAIL,
+                [email],
+                fail_silently=False,
+            )
+            request.session["reset_email"] = email
+            return JsonResponse({"status": "success", "message": "OTP sent to your email."})
+
+        except User.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "No account found with that email."}, status=404)
+
+    elif step == "verify_otp":
+        email = request.session.get("reset_email")
+        entered_otp = request.POST.get("otp")
+
+        if not email or not entered_otp:
+            return JsonResponse({"status": "error", "message": "Session expired or invalid request."}, status=400)
+
+        try:
+            user = User.objects.get(email=email)
+            if user.otp and str(user.otp) == entered_otp and user.otp_exp > timezone.now():
+                user.otp = None # Invalidate OTP after successful verification
+                user.save()
+                return JsonResponse({"status": "success", "message": "OTP verified. You can now reset your password."})
+            else:
+                return JsonResponse({"status": "error", "message": "Invalid or expired OTP."}, status=400)
+        except User.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "No account found."}, status=404)
+
+    elif step == "reset_password":
+        email = request.session.get("reset_email")
+        new_password1 = request.POST.get("new_password1")
+        new_password2 = request.POST.get("new_password2")
+
+        if not email:
+            return JsonResponse({"status": "error", "message": "Session expired. Please start over."}, status=400)
+
+        if new_password1 != new_password2:
+            return JsonResponse({"status": "error", "message": "Passwords do not match."}, status=400)
+
+        try:
+            user = User.objects.get(email=email)
+            user.set_password(new_password1)
+            user.save()
+
+            # Clear session data
+            request.session.pop("reset_email", None)
+
+            return JsonResponse({"status": "success", "message": "Password reset successfully. You can now log in."})
+        except User.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "User not found."}, status=404)
+
+    return JsonResponse({"status": "error", "message": "Invalid step provided."}, status=400)
