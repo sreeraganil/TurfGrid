@@ -1,6 +1,38 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_head %}
+<style>
+  .animate-zoom {
+    animation: ballAnimate 2s ease-in-out forwards;
+  }
+
+  @keyframes ballAnimate {
+    0% {
+      transform: scale(1) translateY(0);
+    }
+    20% {
+      transform: scale(1) translateY(-10px); /* bounce up */
+    }
+    40% {
+      transform: scale(1) translateY(0); /* bounce down */
+    }
+    60% {
+      transform: scale(1) translateY(-10px); /* small bounce */
+    }
+    80% {
+      transform: scale(1) translateY(0); /* settle */
+    }
+    100% {
+      transform: scale(50) translateX(-90%);
+    }
+  }
+</style>
+{% endblock %}
+
+
+
+
 {% block content %}
 
 <header class="sticky top-0 z-20 left-0 bg-gradient-to-r from-purple-700 to-purple-600 text-white shadow-lg">
@@ -95,7 +127,7 @@
 </header>
 
 <!-- Hero Section -->
-<section class="bg-gradient-to-r from-purple-700 to-purple-600 text-white py-20 md:py-28">
+<section class="bg-gradient-to-r from-purple-700 to-purple-600 text-white py-20 md:py-28 overflow-hidden">
   <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
     <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
       <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6">
@@ -133,8 +165,9 @@
     </div>
     <div class="md:w-1/2">
       <div class="relative">
-        <div class="w-full h-80 md:h-96 bg-purple-500 rounded-2xl shadow-2xl overflow-hidden flex items-center justify-center">
+        <div class="relative w-full h-80 md:h-96 bg-purple-500 rounded-2xl shadow-2xl flex items-center justify-center">
           <img src="{% static 'images/turf.png' %}" alt="Football turf" class="w-full h-full object-cover">
+          <img src="{% static 'images/football.png' %}" alt="Football turf" class="absolute w-10 h-10 animate-zoom">
         </div>
         <div class="absolute -bottom-5 -right-5 bg-white text-purple-700 p-4 rounded-lg shadow-lg hidden md:block">
           <div class="text-center">
